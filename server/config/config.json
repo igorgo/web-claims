@@ -12,7 +12,9 @@
         "schema": "PARUS",
         "username": "NODE",
         "password": "nnooddee",
-        "oldpkgsess": true
+        "oldpkgsess": true,
+        "scompany": "ORG",
+        "module": "Client"
     },
     "public": {
         "username": "GUEST",

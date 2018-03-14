@@ -4,6 +4,7 @@
 const oci = require('oracledb')
 const _ = require('lodash')
 const crypto = require('crypto')
+const duration = require('go-duration')
 
 // Constants
 const SESSION_TIMEOUT_MINUTES = 480
@@ -159,7 +160,7 @@ class OraSqlParams {
 }
 
 class AfinaSequelDb {
-  constructor ({host, port, database, schema, oldPkgSess, username, password, scompany, module}) {
+  constructor ({host, port, database, schema, oldPkgSess, username, password, scompany, module, pubUser, pubPassword}) {
     if (!host) throw new Error('Db host is undefined')
     this.isOpened = false
     this.schema = schema
@@ -170,6 +171,38 @@ class AfinaSequelDb {
     this.module = module
     this.conectionString = host + ':' + port + '/' + database
     this.pool = {}
+    this.pubSessionActive = false
+    this.pubSessionID = ''
+    this.pubUser = pubUser
+    this.pubPassword = pubPassword
+  }
+
+  async __pubLogon () {
+    this.pubSessionActive = false
+    try {
+      const cLogInfo = await this.logon(this.pubUser, this.pubPassword)
+      this.pubSessionID = cLogInfo.sessionID
+      this.pubSessionActive = true
+      this.pubSessionTimer = setInterval(
+        this.pubKeepAlive,
+        duration('30m')
+      )
+      console.log('Public session started')
+    } catch (e) {
+      console.log('Public session not started')
+      console.error(e)
+    }
+  }
+
+  pubKeepAlive () {
+    if (!this.pubSessionActive) return
+    this.getConnectionPub().then((c) => {
+      c.close()
+    })
+  }
+
+  async getConnectionPub () {
+    return this.getConnection(this.pubSessionID)
   }
 
   async open () {
@@ -188,6 +221,7 @@ class AfinaSequelDb {
     })
     this.isOpened = true
     console.log('The database is open')
+    await this.__pubLogon()
   }
 
   /**
@@ -201,7 +235,12 @@ class AfinaSequelDb {
     if (!this.isOpened) return
     await this.pool.terminate()
     this.isOpened = false
-    console.log.server('The database is closed')
+    console.log('The database is closed')
+    if (this.pubSessionActive) {
+      clearInterval(this.pubSessionTimer)
+      await this.logoff(this.pubSessionID)
+      console.log('The public session is closed')
+    }
   }
 
   /**
