@@ -21,7 +21,7 @@ rest.start = async () => {
   restServer = restify.createServer({ name: 'Afina Server' })
   restServer.use(restify.plugins.bodyParser({ mapParams: true }))
   restServer.use(restify.plugins.queryParser({ mapParams: true }))
-  // require('./restEntries')
+  require('../controllers')
   // require('./restEntriesMock')
   restServer.get(/\/.*/, restify.plugins.serveStatic({
     directory: path.resolve(__dirname, '../../static'),

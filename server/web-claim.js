@@ -28,7 +28,7 @@ async function shutdown (code) {
   const msg = code === 2 ? 'Unexpected error occured.' : 'Shutdown (SIGTERM/SIGINT) Initialised.'
   console.log(msg)
   try {
-    await require('./src/db/db').close()
+    await require('./src/db').close()
     console.log('Database connection closed.')
   } catch (e) {
     console.error(e)
@@ -39,9 +39,9 @@ async function shutdown (code) {
 
 async function runServer () {
   await loadConfig()
-  const db = require('./src/db/db')
+  const db = require('./src/db')
   await db.open()
-  void require('./src/rest/restServer').start()
+  void require('./src/rest').start()
 }
 
 process.on('SIGTERM', async () => {
@@ -52,15 +52,6 @@ process.on('SIGINT', async () => {
 })
 process.on('SIGHUP', async () => {
   await shutdown(0)
-})
-process.on('message', message => {
-  if (typeof message !== 'object') {
-    return
-  }
-  switch (message.action) {
-    case 'restart':
-      break
-  }
 })
 
 process.on('uncaughtException', async err => {
