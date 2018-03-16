@@ -4,17 +4,18 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'axios'
+      'request',
+      'routine'
     ],
     css: [
       'app.styl'
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons'
+      'material-icons',
       // 'ionicons',
       // 'mdi',
-      // 'fontawesome'
+      'fontawesome'
     ],
     supportIE: true,
     vendor: {
@@ -40,7 +41,16 @@ module.exports = function (ctx) {
     devServer: {
       // https: true,
       // port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8716/api',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          }
+        }
+      }
     },
     // framework: 'all' --- includes everything; for dev only!
     framework: {
@@ -49,6 +59,7 @@ module.exports = function (ctx) {
         'QLayoutHeader',
         'QLayoutDrawer',
         'QPageContainer',
+        'QPageSticky',
         'QPage',
         'QToolbar',
         'QToolbarTitle',
@@ -58,18 +69,31 @@ module.exports = function (ctx) {
         'QListHeader',
         'QItem',
         'QItemMain',
-        'QItemSide'
+        'QItemSide',
+        'QCard',
+        'QCardTitle',
+        'QInput',
+        'QCardMain'
       ],
       directives: [
         'Ripple'
       ],
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'SessionStorage'
       ]
     },
     // animations: 'all' --- includes all animations
     animations: [
+      'fadeIn',
+      'fadeOut',
+      'bounceInRight',
+      'bounceOutRight',
+      'bounceInLeft',
+      'bounceOutLeft',
+      'bounceIn',
+      'bounceOut'
     ],
     pwa: {
       cacheExt: 'js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3',

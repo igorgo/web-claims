@@ -4,7 +4,10 @@ export default [
     path: '/',
     component: () => import('layouts/default'),
     children: [
-      { path: '', component: () => import('pages/index') }
+      { path: '', component: () => import('pages/Main') },
+      { path: '/login', component: () => import('pages/Login') },
+      { path: '/main', component: () => import('pages/Main') },
+      { path: '/filters', component: () => import('pages/FiltersList') }
     ]
   },
 

@@ -365,6 +365,12 @@ class AfinaSequelDb {
     }
   }
 
+  async executePub (aSql, aBindParams = [], aExecuteOptions = {}, aConnection = null) {
+    return this.execute(
+      this.pubSessionID, aSql, aBindParams, aExecuteOptions, aConnection
+    )
+  }
+
   oraErrorExtract (msg) {
     const messages = msg.split(/ORA-\d\d\d\d\d:\s/)
     if (messages.length > 1) return messages[1]
