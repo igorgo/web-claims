@@ -8,6 +8,7 @@ export const logon = async ({ commit, dispatch, state }, { user, pass }) => {
     dispatch('staticData/getClaimStatuses', null, { root: true })
     dispatch('staticData/getAppList', null, { root: true })
     dispatch('staticData/getUnitList', null, { root: true })
+    dispatch('staticData/getBuildList', null, { root: true })
   } catch (e) {
     commit('logOnError', e)
     throw e

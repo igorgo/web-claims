@@ -35,6 +35,24 @@ async function getUnitList (req, res, next) {
   }
 }
 
+async function getBuilds (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID } = req.params
+    const result = await db.execute(sessionID, `
+      select 
+        S01 as "v",
+        S02 as "r",
+        S03 as "b",
+        D01 as "d"
+      from table(UDO_PACKAGE_NODEWEB_IFACE.GET_ALL_BUILDS)`)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
 rest.get('/dicts/claim-statuses', getClaimStatuses)
 rest.get('/dicts/app-list', getAppList)
 rest.get('/dicts/unit-list', getUnitList)
+rest.get('/dicts/build-list', getBuilds)

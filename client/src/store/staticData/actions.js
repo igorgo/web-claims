@@ -23,3 +23,11 @@ export const getUnitList = async ({commit, rootState}) => {
   } catch (e) {
   }
 }
+
+export const getBuildList = async ({commit, rootState}) => {
+  try {
+    const res = await restClient.get('dicts/build-list', { sessionID: rootState.auth.sessionID }, false)
+    commit('setReleases', res.data)
+  } catch (e) {
+  }
+}
