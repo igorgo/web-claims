@@ -3,7 +3,7 @@
     <div>
       <div class="row relative-position q-mb-sm">
         <div class="q-headline text-primary col q-px-xs"><span>Поточні релізи</span></div>
-        <div class="text-primary col q-px-xs"><q-btn v-if="releasesLoaded" class="float-right" flat size="sm" round icon="fa-redo-alt" @click="loadCurReleases(true)"/></div>
+        <div class="text-primary col q-px-xs"><q-btn v-if="releasesLoaded" class="float-right" flat size="md" round icon="autorenew" @click="loadCurReleases(true)"/></div>
       </div>
       <div class="row relative-position overflow-hidden q-pa-sm">
         <div class="q-px-xs col-md col-sm-12">

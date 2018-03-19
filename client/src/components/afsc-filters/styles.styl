@@ -1,0 +1,22 @@
+@import '~variables'
+
+.filter-list-item
+  &.active
+    background-color alpha($primary, .3)
+.filter-list-icon
+  &.editable
+    color $secondary
+    cursor pointer
+.filter-edit-form
+  display flex
+  align-items center
+  justify-content center
+  flex-wrap wrap
+  // .q-tab-pane
+  //  min-height 300px
+@media (max-width: 400px)
+  .filter-edit-form
+    justify-content start
+.q-option-inner
+  &.text-primary-8
+    color $primary

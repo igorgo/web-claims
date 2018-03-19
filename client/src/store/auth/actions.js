@@ -5,6 +5,9 @@ export const logon = async ({ commit, dispatch, state }, { user, pass }) => {
     commit('clearError')
     const res = await restClient.post('auth/logon', { user, pass })
     commit('logOn', res.data)
+    dispatch('staticData/getClaimStatuses', null, { root: true })
+    dispatch('staticData/getAppList', null, { root: true })
+    dispatch('staticData/getUnitList', null, { root: true })
   } catch (e) {
     commit('logOnError', e)
     throw e
@@ -15,6 +18,11 @@ export const logon = async ({ commit, dispatch, state }, { user, pass }) => {
 }
 
 export const logoff = async ({ commit, state }) => {
-  await restClient.post('auth/logoff', { sessionID: state.sessionID })
-  commit('logOff')
+  try {
+    await restClient.post('auth/logoff', { sessionID: state.sessionID })
+  } catch (e) {
+  } finally {
+    commit('logOff')
+    commit('staticData/resetStaticData', null, { root: true })
+  }
 }

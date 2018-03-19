@@ -1,17 +1,30 @@
 import axios from 'axios'
-import { Notify } from 'quasar'
+// import store from '../../store'
+import { Notify, Loading, QSpinnerHourglass } from 'quasar'
 
 const fullEndPoint = ep => '/api/' + ep
 
 const parseError = e => {
   const message = e.response ? e.response.data.message : e.message
   const m = message.match(/^ORA-\d+: (.+)/)
-  return m.length > 1 ? m[1] : message
+  return (m && (m.length > 1)) ? m[1] : message
+}
+
+const showLoading = () => {
+  Loading.show({
+    spinner: QSpinnerHourglass,
+    delay: 50
+  })
+}
+
+const hideLoading = () => {
+  Loading.hide()
 }
 
 const restClient = {
-  post: async (endPoint, data) => {
+  post: async (endPoint, data, sync = true) => {
     try {
+      if (sync) showLoading()
       // noinspection UnnecessaryLocalVariableJS
       const resp = await axios.post(
         fullEndPoint(endPoint),
@@ -28,10 +41,13 @@ const restClient = {
         type: 'negative'
       })
       throw new Error(message)
+    } finally {
+      if (sync) hideLoading()
     }
   },
-  get: async (endPoint, params) => {
+  get: async (endPoint, params, sync = true) => {
     try {
+      if (sync) showLoading()
       // noinspection UnnecessaryLocalVariableJS
       const resp = await axios.request({
         url: fullEndPoint(endPoint),
@@ -47,6 +63,8 @@ const restClient = {
         type: 'negative'
       })
       throw new Error(message)
+    } finally {
+      if (sync) hideLoading()
     }
   }
 }

@@ -17,7 +17,7 @@
       <q-item-side icon="fa-home"/>
       <q-item-main label="Головна"/>
     </q-item>
-    <q-item to="/filters">
+    <q-item v-if="authorized" to="/filters">
       <q-item-side icon="filter list"/>
       <q-item-main label="Управління фільтрами"/>
     </q-item>
@@ -38,6 +38,12 @@ export default {
       authorized: state => state.auth.authorized,
       userFullName: state => state.auth.userFullName
     })
+  },
+  methods: {
+    async logoff () {
+      void await this.$store.dispatch('auth/logoff')
+      this.$router.replace('/main')
+    }
   }
 }
 </script>

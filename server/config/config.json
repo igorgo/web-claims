@@ -2,7 +2,7 @@
     "rest": {
         "public": true,
         "log": true,
-        "port": "8716",
+        "port": "8816",
         "host": "0.0.0.0"
     },
     "db": {

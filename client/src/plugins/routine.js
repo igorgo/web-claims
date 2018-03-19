@@ -4,5 +4,5 @@
 import Routines from './routines'
 
 export default ({ app, router, Vue }) => {
-  Vue.prototype.$routine = Routines
+  Vue.prototype.$routines = Routines
 }

@@ -1,1 +1,60 @@
 // app global css
+@import '../components/styles.styl'
+
+$primary-9   = tint($primary, 90%)
+$primary-8   = tint($primary, 80%)
+$primary-7   = tint($primary, 70%)
+$primary-6   = tint($primary, 60%)
+$primary-5   = tint($primary, 50%)
+$primary-4   = tint($primary, 40%)
+$primary-3   = tint($primary, 30%)
+$primary-2   = tint($primary, 20%)
+$primary-1   = tint($primary, 10%)
+
+.text-primary-9
+  color $primary-9
+.text-primary-8
+  color $primary-8
+.text-primary-7
+  color $primary-7
+.text-primary-6
+  color $primary-6
+.text-primary-5
+  color $primary-5
+.text-primary-4
+  color $primary-4
+.text-primary-3
+  color $primary-3
+.text-primary-2
+  color $primary-2
+.text-primary-1
+  color $primary-1
+.bg-primary-9
+  background $primary-9
+.bg-primary-8
+  background $primary-8
+.bg-primary-7
+  background $primary-7
+.bg-primary-6
+  background $primary-6
+.bg-primary-5
+  background $primary-5
+.bg-primary-4
+  background $primary-4
+.bg-primary-3
+  background $primary-3
+.bg-primary-2
+  background $primary-2
+.bg-primary-1
+  background $primary-1
+
+.q-tab
+  &.active
+    background-color $primary-9
+    color $dark
+.q-tab-pane
+  background-color $primary-9
+@media (max-width: 991px)
+  .q-dot
+    top 5px
+    right 1px

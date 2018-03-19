@@ -7,7 +7,9 @@ export default [
       { path: '', component: () => import('pages/Main') },
       { path: '/login', component: () => import('pages/Login') },
       { path: '/main', component: () => import('pages/Main') },
-      { path: '/filters', component: () => import('pages/FiltersList') }
+      { path: '/filters', component: () => import('pages/FiltersList') },
+      { path: '/filters/:mode/:id', component: () => import('pages/FilterEdit') },
+      { path: '/filters/:mode', component: () => import('pages/FilterEdit') }
     ]
   },
 

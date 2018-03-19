@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import auth from './auth'
 import main from './main'
 import filters from './filters'
+import staticData from './staticData'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,18 @@ const store = new Vuex.Store({
   modules: {
     auth,
     main,
+    staticData,
     filters
+  },
+  state: {
+    restInProgress: false
+  },
+  getters: {
+    restInProgress: state => state.restInProgress
+  },
+  mutations: {
+    setRestProgress: state => { state.restInProgress = true },
+    unsetRestProgress: state => { state.restInProgress = false }
   }
 })
 

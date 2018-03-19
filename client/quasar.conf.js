@@ -44,7 +44,7 @@ module.exports = function (ctx) {
       open: true, // opens browser window automatically
       proxy: {
         '/api': {
-          target: 'http://localhost:8716/api',
+          target: 'http://localhost:8816/api',
           changeOrigin: true,
           pathRewrite: {
             '^/api': ''
@@ -64,6 +64,7 @@ module.exports = function (ctx) {
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
+        'QBtnGroup',
         'QIcon',
         'QList',
         'QListHeader',
@@ -73,6 +74,9 @@ module.exports = function (ctx) {
         'QCard',
         'QCardTitle',
         'QInput',
+        'QTabs',
+        'QTab',
+        'QTabPane',
         'QCardMain'
       ],
       directives: [
@@ -81,7 +85,9 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Notify',
-        'SessionStorage'
+        'SessionStorage',
+        'Loading',
+        'Dialog'
       ]
     },
     // animations: 'all' --- includes all animations

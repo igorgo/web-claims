@@ -1,10 +1,15 @@
 <template>
   <q-page  class="q-pa-md">
-    <div class="content">
+    <div class="content relative-position">
       <div class="q-headline text-primary col q-px-xs"><span>Мої фільтри рекламацій</span></div>
       <q-list no-border>
         <!-- cond-filter :class="{'afinasql-bg':index===listIndex}" v-for="(item, index) in filters" :key="index"
                      :filterRec="item" :filterIndex="index" /-->
+        <afsc-filter-list-item
+          v-for="(item, index) in filters" :key="index"
+          :filterRec="item"
+          :filterIndex="index"
+        />
       </q-list>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn round color="primary" @click="addFilter">
@@ -16,7 +21,7 @@
 </template>
 
 <script>
-// import CondFilter from './CondFilter.vue'
+import { AfscFilterListItem } from '../components'
 // import {AfEventsMapper} from '../base'
 
 export default {
@@ -32,6 +37,7 @@ export default {
   },
   // mixins: [AfEventsMapper],
   components: {
+    AfscFilterListItem
     // CondFilter
   },
   computed: {
@@ -44,8 +50,8 @@ export default {
   },
   methods: {
     addFilter () {
-      void this.$store.dispatch('getConditionFilter', { conditionId: null, from: 'filters' })
-      this.$router.push('/filter')
+      // void this.$store.dispatch('getConditionFilter', { conditionId: null, from: 'filters' })
+      this.$router.push('/filters/new/')
     },
     __onKeyArrowDown () {
       void this.$store.dispatch('conditionListScroll', 1)
