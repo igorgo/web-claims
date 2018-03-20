@@ -15,8 +15,7 @@ export default {
         props: Object.assign(this._getProps(), {
           value: this._value,
           multiple: this.multiple,
-          options: this.options,
-          clearable: true
+          options: this.options
         }),
         on: Object.assign(this._getHandlers(), {
           input: (val) => {

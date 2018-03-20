@@ -31,3 +31,11 @@ export const getBuildList = async ({commit, rootState}) => {
   } catch (e) {
   }
 }
+
+export const getPersonList = async ({commit, rootState}) => {
+  try {
+    const res = await restClient.get('dicts/person-list', { sessionID: rootState.auth.sessionID }, false)
+    commit('setPersons', res.data)
+  } catch (e) {
+  }
+}

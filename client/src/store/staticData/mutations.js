@@ -20,18 +20,22 @@ export const setUnitList = (state, unitList) => {
   saveStaticData(state)
 }
 
+export const setPersons = (state, personList) => {
+  state.personList = personList.map(i => ({label: i.l, value: i.v}))
+  saveStaticData(state)
+}
+
 export const setReleases = (state, buildList) => {
-  let releases = new Map()
+  let releases = {}
   for (let i = 0; i < buildList.length; i++) {
-    if (!releases.has(buildList[i].v)) {
-      releases.set(buildList[i].v, new Map())
+    if (!releases.hasOwnProperty(buildList[i].v)) {
+      releases[buildList[i].v] = {}
     }
-    if (!releases.get(buildList[i].v).has(buildList[i].r)) {
-      releases.get(buildList[i].v).set(buildList[i].r, new Map())
+    if (!releases[buildList[i].v].hasOwnProperty(buildList[i].r)) {
+      releases[buildList[i].v][buildList[i].r] = {}
     }
-    releases.get(buildList[i].v).get(buildList[i].r).set(buildList[i].b, Routines.formatDate(buildList[i].d))
+    releases[buildList[i].v][buildList[i].r][buildList[i].b] = Routines.formatDate(buildList[i].d)
   }
-  console.log(releases)
   state.releases = releases
   saveStaticData(state)
 }
@@ -40,6 +44,7 @@ export const resetStaticData = (state) => {
   state.claimStatuses = []
   state.appList = []
   state.unitList = []
-  state.releases = new Map()
+  state.releases = {}
+  state.personList = {}
   SessionStorage.remove('staticData')
 }

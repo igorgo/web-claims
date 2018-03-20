@@ -1,5 +1,23 @@
 @import '~variables'
 
+.form-container
+  max-width 90vw
+@media (min-width: 576px)
+  .form-container
+    .q-tab-pane
+      min-width 260px
+@media (min-width: 768px)
+  .form-container
+    .q-tab-pane
+      min-width 510px
+@media (min-width: 992px)
+  .form-container
+    .q-tab-pane
+      min-width 690px
+.q-option-inner
+  &.text-primary-8
+    color $primary
+
 .form-header
   background-color $primary
   padding 5px

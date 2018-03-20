@@ -7,7 +7,7 @@
         <q-btn round flat outline icon="delete" @click="deleteFilter"></q-btn>
       </div>
       <div slot="tab-0">
-        <div class="row q-pb-xs"><afsc-input class="col" label="Номер" v-model="filter.claimNumb" mandatory /></div>
+        <div class="row q-pb-xs"><afsc-input class="col" label="Номер" v-model="filter.claimNumb" /></div>
         <div class="row q-py-xs"><afsc-select class="col" label="Тип" v-model="filter.claimType" :options="$routines.CLAIM_TYPE_OPTIONS" multiple /></div>
         <div class="row q-pt-xs"><afsc-select class="col" label="Поточний стан" v-model="filter.claimStatus" :options="statusOptions" multiple /></div>
       </div>
@@ -31,8 +31,73 @@
           />
         </div>
       </div>
-      <div slot="tab-5">
-        <div class="row q-py-xs"><afsc-input class="col" label="Номер" v-model="filter.claimContent" /></div>
+      <div slot="tab-2">
+        <div class="row q-pb-xs">
+          <afsc-select
+            label="Версія"
+            v-model="filter.claimVersion"
+            :options="versionOptions"
+            @input="versionChange"
+            multiple
+            class="col"
+          />
+        </div>
+        <div class="row q-py-xs">
+          <afsc-select
+            label="Реліз"
+            v-model="filter.claimRelease"
+            :options="releasesOptions"
+            @input="releaseChange"
+            :disable="releaseDisabled"
+            multiple
+            class="col"
+          />
+        </div>
+        <div class="row q-pt-xs">
+          <afsc-select
+            label="Збірка"
+            v-model="filter.claimBuild"
+            :options="buildsOptions"
+            :disable="buildDisabled"
+            multiple
+            class="col"
+          />
+        </div>
+      </div>
+      <div slot="tab-3">
+        <div class="row q-pb-sm">
+          <afsc-select
+            label="Виконавець"
+            v-model="filter.claimExecutor"
+            :options="personsOptions"
+            class="col-md-8 col-12"
+            :disable="filter.imExecutor === 1"
+          />
+          <afsc-checkbox
+            label="Я - виконавець"
+            v-model="filter.imExecutor"
+            class="col-md-4 q-pl-sm q-pt-xs col-12"
+            @input="imExecutorChange"
+          />
+        </div>
+        <div class="row q-pt-sm ">
+          <afsc-select
+            label="Автор"
+            v-model="filter.claimAuthor"
+            :options="personsOptions"
+            class="col-md-8 col-12"
+            :disable="filter.imInitiator === 1"
+          />
+          <afsc-checkbox
+            label="Я - автор"
+            v-model="filter.imInitiator"
+            class="col-md-4 q-pl-sm  q-pt-xs col-12"
+            @input="imAuthorChange"
+          />
+        </div>
+      </div>
+      <div slot="tab-4">
+        <div class="row q-py-xs"><afsc-input class="col" label="Зміст" v-model="filter.claimContent" /></div>
       </div>
     </afsc-form>
   </q-page>
@@ -40,7 +105,11 @@
 
 <script>
 import GlobalKeyListener from '../components/mixins/GlobalKeyListener'
-import {AfscForm, AfscInput, AfscSelect, AfscAutoComplete} from '../components'
+import {AfscForm, AfscInput, AfscSelect, AfscAutoComplete, AfscCheckbox} from '../components'
+
+function isOneValue (val) {
+  return val && (val.split(';')).length === 1
+}
 
 export default {
   name: 'FilterEdit',
@@ -81,7 +150,8 @@ export default {
     AfscForm,
     AfscInput,
     AfscAutoComplete,
-    AfscSelect
+    AfscSelect,
+    AfscCheckbox
   },
   mixins: [GlobalKeyListener],
   computed:
@@ -96,16 +166,55 @@ export default {
         return this.$route.params.mode === 'new'
       },
       statusOptions () {
-        return this.$store.state.staticData.claimStatuses.map(i => ({ label: i, value: i }))
+        return this.$store.getters['staticData/statusesForSelect']
       },
       appsOptions () {
-        return this.$store.state.staticData.appList.map(i => ({ label: i, value: i }))
+        return this.$store.getters['staticData/appsForSelect']
       },
       unitOptions () {
-        return this.$store.state.staticData.unitList.map(i => ({ label: i, value: i }))
+        return this.$store.getters['staticData/unitsForSelect']
+      },
+      versionOptions () {
+        return this.$store.getters['staticData/versionsForSelect']
+      },
+      releasesOptions () {
+        return this.$store.getters['staticData/releasesForSelect'](this.filter.claimVersion)
+      },
+      buildsOptions () {
+        return this.$store.getters['staticData/buildsForSelect'](this.filter.claimVersion, this.filter.claimRelease)
+      },
+      personsOptions () {
+        return this.$store.getters['staticData/personsForSelect']
+      },
+      releaseDisabled () {
+        return !isOneValue(this.filter.claimVersion)
+      },
+      buildDisabled () {
+        return !isOneValue(this.filter.claimRelease)
       }
     },
   methods: {
+    versionChange (val) {
+      if (!isOneValue(this.filter.claimVersion)) {
+        this.filter.claimRelease = ''
+        this.filter.claimBuild = ''
+      }
+    },
+    releaseChange (val) {
+      if (!isOneValue(this.filter.claimRelease)) {
+        this.filter.claimBuild = ''
+      }
+    },
+    imExecutorChange (val) {
+      if (val) {
+        this.filter.claimExecutor = ''
+      }
+    },
+    imAuthorChange (val) {
+      if (val) {
+        this.filter.claimAuthor = ''
+      }
+    },
     async getEditedFilter () {
       try {
         const res = await this.$request.get(

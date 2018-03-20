@@ -9,13 +9,11 @@ export const logon = async ({ commit, dispatch, state }, { user, pass }) => {
     dispatch('staticData/getAppList', null, { root: true })
     dispatch('staticData/getUnitList', null, { root: true })
     dispatch('staticData/getBuildList', null, { root: true })
+    dispatch('staticData/getPersonList', null, { root: true })
   } catch (e) {
     commit('logOnError', e)
     throw e
   }
-
-  // dispatch('dicts/getAccs', {}, { root: true })
-  // router.back()
 }
 
 export const logoff = async ({ commit, state }) => {

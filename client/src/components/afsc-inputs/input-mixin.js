@@ -3,7 +3,8 @@ export default {
     label: String,
     value: String,
     mandatory: Boolean,
-    disable: Boolean
+    disable: Boolean,
+    nonClearable: Boolean
   },
   computed: {
     _color () {
@@ -22,7 +23,8 @@ export default {
         color: this._color,
         'inverted-light': true,
         value: this.value,
-        disable: this.disable
+        disable: this.disable,
+        clearable: !this.nonClearable
       }
     },
     _getHandlers () {

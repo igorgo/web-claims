@@ -28,7 +28,7 @@ export default {
     }
   },
   render (h) {
-    return h('div', [this._drawHeader(h), this._drawBody(h), this._drawFooter(h)])
+    return h('div', {staticClass: 'form-container'}, [this._drawHeader(h), this._drawBody(h), this._drawFooter(h)])
   },
   methods: {
     _makeTabs (h) {

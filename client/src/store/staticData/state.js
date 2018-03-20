@@ -4,7 +4,8 @@ const savedStaticData = SessionStorage.has('staticData') ? SessionStorage.get.it
   claimStatuses: [],
   unitList: [],
   appList: [],
-  releases: new Map()
+  releases: {},
+  personList: []
 }
 
 export default {
