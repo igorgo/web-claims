@@ -1,15 +1,23 @@
 <template>
   <q-page class="filter-edit-form">
-    <afsc-form :title="actionTitle" :tabs="tabs" paneHeight="300px" :buttons="buttons">
+    <afsc-form :title="actionTitle" :tabs="tabs" paneHeight="200px" :buttons="formButtons">
       <div slot="header-actions" v-if="isEditMode">
         <span>{{'«' + filter.name + '»'}}</span>
         <q-btn round flat outline icon="edit" @click="renameFilter"></q-btn>
         <q-btn round flat outline icon="delete" @click="deleteFilter"></q-btn>
       </div>
       <div slot="tab-0">
-        <div class="row q-pb-xs"><afsc-input class="col" label="Номер" v-model="filter.claimNumb" /></div>
-        <div class="row q-py-xs"><afsc-select class="col" label="Тип" v-model="filter.claimType" :options="$routines.CLAIM_TYPE_OPTIONS" multiple /></div>
-        <div class="row q-pt-xs"><afsc-select class="col" label="Поточний стан" v-model="filter.claimStatus" :options="statusOptions" multiple /></div>
+        <div class="row q-pb-xs">
+          <afsc-input class="col" label="Номер" v-model="filter.claimNumb"/>
+        </div>
+        <div class="row q-py-xs">
+          <afsc-select class="col" label="Тип" v-model="filter.claimType" :options="$routines.CLAIM_TYPE_OPTIONS"
+                       multiple/>
+        </div>
+        <div class="row q-pt-xs">
+          <afsc-select class="col" label="Поточний стан" v-model="filter.claimStatus" :options="statusOptions"
+                       multiple/>
+        </div>
       </div>
       <div slot="tab-1">
         <div class="row q-pb-xs">
@@ -97,7 +105,9 @@
         </div>
       </div>
       <div slot="tab-4">
-        <div class="row q-py-xs"><afsc-input class="col" label="Зміст" v-model="filter.claimContent" /></div>
+        <div class="row q-py-xs">
+          <afsc-input class="col" label="Зміст" v-model="filter.claimContent"/>
+        </div>
       </div>
     </afsc-form>
   </q-page>
@@ -125,20 +135,6 @@ export default {
         'Персони',
         'Зміст'
       ],
-      buttons: [
-        {
-          label: 'OK'
-        },
-        {
-          label: 'Очистити'
-        },
-        {
-          label: 'Скасування',
-          handler: () => {
-            this.$router.back()
-          }
-        }
-      ],
       filter: {
         rn: null,
         name: '',
@@ -156,6 +152,41 @@ export default {
   mixins: [GlobalKeyListener],
   computed:
     {
+      formButtons () {
+        const commonButtons = [
+          {
+            label: 'Очистити',
+            handler: this.clearFilter
+          },
+          {
+            label: 'Скасування',
+            handler: () => {
+              this.$router.back()
+            }
+          }
+        ]
+        const editButtons = [
+          {
+            label: 'OK',
+            handler: this.saveFilter
+          }
+        ]
+        const condButtons = [
+          {
+            label: 'Застосувати',
+            handler: () => {
+            }
+          },
+          {
+            label: 'Зберегти та застосувати',
+            handler: () => {
+            }
+          }
+        ]
+        return this.isCondMode
+          ? [...condButtons, ...commonButtons]
+          : [...editButtons, ...commonButtons]
+      },
       actionTitle () {
         return `${this.isEditMode ? 'Редагування' : 'Додавання'} фільтра`
       },
@@ -164,6 +195,9 @@ export default {
       },
       isAddMode () {
         return this.$route.params.mode === 'new'
+      },
+      isCondMode () {
+        return this.$route.params.mode === 'cond'
       },
       statusOptions () {
         return this.$store.getters['staticData/statusesForSelect']
@@ -194,6 +228,21 @@ export default {
       }
     },
   methods: {
+    async saveFilter () {
+      try {
+        const name = await this.promptFilterName()
+        if (this.checkNewFilterName(name)) {
+          this.filter.name = name
+
+        } else {
+          this.saveFilter()
+        }
+      } catch (e) {
+      }
+    },
+    clearFilter () {
+      this.filter = Object.assign(this.filter, this.$store.state.filters.emptyFilter)
+    },
     versionChange (val) {
       if (!isOneValue(this.filter.claimVersion)) {
         this.filter.claimRelease = ''
@@ -229,27 +278,30 @@ export default {
         this.$router.back()
       }
     },
+    checkNewFilterName (name) {
+      if (!name) {
+        this.$q.notify({
+          message: 'Назва фільтра не може бути порожньою',
+          type: 'negative'
+        })
+        return false
+      }
+      if (name !== this.filter.name && this.$store.getters['filters/filtersNames'].includes(name)) {
+        this.$q.notify({
+          message: `Назва «${name}» вже використовується для іншого фільтра.`,
+          type: 'negative'
+        })
+        return false
+      }
+      return true
+    },
     async renameFilter () {
       try {
         const name = await this.promptFilterName()
-        if (!name) {
-          this.$q.notify({
-            message: 'Назва фільтра не може бути порожньою',
-            type: 'negative'
-          })
+        if (this.checkNewFilterName(name)) {
+          this.filter.name = name
+        } else {
           this.renameFilter()
-          return
-        }
-        if (name !== this.filter.name) {
-          if (this.$store.getters['filters/filtersNames'].includes(name)) {
-            this.$q.notify({
-              message: `Назва «${name}» вже використовується для іншого фільтра.`,
-              type: 'negative'
-            })
-            this.renameFilter()
-          } else {
-            this.filter.name = name
-          }
         }
       } catch (e) {
       }

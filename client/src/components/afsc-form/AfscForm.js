@@ -133,7 +133,7 @@ export default {
       return h(
         'div',
         {
-          staticClass: 'form-footer row items-center'
+          staticClass: 'form-footer row items-stretch'
         },
         this._makeButtons(h)
       )
