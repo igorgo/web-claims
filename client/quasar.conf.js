@@ -56,6 +56,7 @@ module.exports = function (ctx) {
     framework: {
       components: [
         'QLayout',
+        'QScrollArea',
         'QLayoutHeader',
         'QLayoutDrawer',
         'QPageContainer',
@@ -65,6 +66,7 @@ module.exports = function (ctx) {
         'QToolbarTitle',
         'QBtn',
         'QBtnGroup',
+        'QPagination',
         'QIcon',
         'QList',
         'QListHeader',
@@ -80,14 +82,17 @@ module.exports = function (ctx) {
         'QCardMain'
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'TouchPan',
+        'BackToTop'
       ],
       // Quasar plugins
       plugins: [
         'Notify',
         'SessionStorage',
         'Loading',
-        'Dialog'
+        'Dialog',
+        'Platform'
       ]
     },
     // animations: 'all' --- includes all animations

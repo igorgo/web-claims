@@ -8,7 +8,7 @@
       </div>
       <div slot="tab-0">
         <div class="row q-pb-xs">
-          <afsc-input class="col" label="Номер" v-model="filter.claimNumb"/>
+          <afsc-input class="col" label="Номер" v-model="filter.claimNumb" mandatory/>
         </div>
         <div class="row q-py-xs">
           <afsc-select class="col" label="Тип" v-model="filter.claimType" :options="$routines.CLAIM_TYPE_OPTIONS"

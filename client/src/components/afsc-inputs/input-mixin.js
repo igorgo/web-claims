@@ -9,7 +9,7 @@ export default {
   computed: {
     _color () {
       return (this.mandatory && !this.value)
-        ? 'yellow-11'
+        ? 'mand-color'
         : 'primary-8'
     },
     valid () {
