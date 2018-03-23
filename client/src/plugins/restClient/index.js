@@ -2,7 +2,7 @@ import axios from 'axios'
 // import store from '../../store'
 import { Notify, Loading, QSpinnerHourglass } from 'quasar'
 
-const fullEndPoint = ep => '/api/' + ep
+const fullEndPoint = ep => '/api' + ((ep.charAt(0) === '/') ? '' : '/') + ep
 
 const parseError = e => {
   const message = e.response ? e.response.data.message : e.message

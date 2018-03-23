@@ -3,8 +3,6 @@
     <div class="content relative-position">
       <div class="q-headline text-primary col q-px-xs"><span>Мої фільтри рекламацій</span></div>
       <q-list no-border>
-        <!-- cond-filter :class="{'afinasql-bg':index===listIndex}" v-for="(item, index) in filters" :key="index"
-                     :filterRec="item" :filterIndex="index" /-->
         <afsc-filter-list-item
           v-for="(item, index) in filters" :key="index"
           :filterRec="item"
@@ -13,7 +11,7 @@
       </q-list>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn round color="primary" @click="addFilter">
-          <q-icon name="add"/>
+          <q-icon name="bt-add"/>
         </q-btn>
       </q-page-sticky>
     </div>
@@ -21,24 +19,22 @@
 </template>
 
 <script>
-import { AfscFilterListItem } from '../components'
-// import {AfEventsMapper} from '../base'
+import { AfscFilterListItem, GlobalKeyListener } from '../components'
 
 export default {
   data () {
     return {
-      eventsMap: {
-        'key:arrow:down': this.__onKeyArrowDown,
-        'key:arrow:up': this.__onKeyArrowUp,
-        'key:f2': this.__editFilter,
-        'key:insert': this.addFilter
+      keysMap: {
+        'ArrowDown': this._onKeyArrowDown,
+        'ArrowUp': this._onKeyArrowUp,
+        'F2': this.editFilter,
+        'Insert': this.addFilter
       }
     }
   },
-  // mixins: [AfEventsMapper],
+  mixins: [GlobalKeyListener],
   components: {
     AfscFilterListItem
-    // CondFilter
   },
   computed: {
     filters () {
@@ -53,20 +49,15 @@ export default {
       // void this.$store.dispatch('getConditionFilter', { conditionId: null, from: 'filters' })
       this.$router.push('/filters/new/')
     },
-    __onKeyArrowDown () {
-      void this.$store.dispatch('conditionListScroll', 1)
+    _onKeyArrowDown () {
+      this.$store.commit('filters/filtersListScroll', 1)
     },
-    __onKeyArrowUp () {
-      void this.$store.dispatch('conditionListScroll', -1)
+    _onKeyArrowUp () {
+      this.$store.commit('filters/filtersListScroll', -1)
     },
-    __editFilter () {
-      if ((this.listIndex >= 0) && (this.filters[this.listIndex]['EDITABLE'] === 'Y')) {
-        void this.$store.dispatch('getConditionFilter', {
-          socket: this.$socket,
-          conditionId: this.filters[this.listIndex]['RN'],
-          from: 'filters'
-        })
-        this.$router.push('/filter')
+    editFilter () {
+      if ((this.listIndex >= 0) && (this.filters[this.listIndex].editable === 'Y')) {
+        this.$router.push('/filters/edit/' + this.filters[this.listIndex].rn)
       }
     }
   },

@@ -154,12 +154,12 @@ function formatDateFull (str) {
     : str
 }
 
-function mapEvents ({eventsMap, $root}, listen) {
-  if (!eventsMap) return
-  for (let i in eventsMap) {
-    if (eventsMap.hasOwnProperty(i)) {
-      if (listen) $root.$on('globalKey:' + i, eventsMap[i])
-      else $root.$off('globalKey:' + i, eventsMap[i])
+function mapEvents ({keysMap, $root}, listen) {
+  if (!keysMap) return
+  for (let i in keysMap) {
+    if (keysMap.hasOwnProperty(i)) {
+      if (listen) $root.$on('globalKey:' + i, keysMap[i])
+      else $root.$off('globalKey:' + i, keysMap[i])
     }
   }
 }

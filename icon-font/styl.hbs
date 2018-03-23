@@ -1,0 +1,26 @@
+@font-face
+  font-family "{{fontName}}"
+  font-style normal
+  font-weight normal
+  src {{{src}}}
+
+{{baseSelector}}
+  line-height 1
+
+{{baseSelector}}:before
+  font-family {{fontName}} !important
+  font-style normal
+  font-weight normal
+  vertical-align top
+  display inline-block
+  speak none
+  font-variant normal
+  text-transform none
+  text-rendering auto
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
+{{#each codepoints}}
+.{{../classPrefix}}{{@key}}:before
+  content: "\\{{this}}"
+{{/each}}

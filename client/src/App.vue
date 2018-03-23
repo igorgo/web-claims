@@ -23,7 +23,7 @@ export default {
         // console.log('match ' + shortcutCode)
         this.$root.$emit('globalKey:' + shortcutCode)
       } else {
-        // console.log('miss ' + shortcutCode)
+        console.log('miss ' + shortcutCode)
       }
       // event.preventDefault()
       // this.$q.events.$emit(keyMapper[event.keyCode][modifiers])

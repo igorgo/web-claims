@@ -5,11 +5,10 @@
     <q-item>
       <q-item-main
         :label="filterRec.name"
-        @click="console.log(2222)"
       />
       <div @click="editFilter(filterRec.rn)">
         <q-item-side
-          :class="[ 'filter-list-icon', {'editable': editable}, 'qwexqwed']"
+          :class="[ 'filter-list-icon', {'editable': editable}]"
           :icon="iconEdit"
         />
       </div>
@@ -34,7 +33,7 @@ export default {
       return this.$props.filterRec.editable === 'Y'
     },
     iconEdit () {
-      return this.editable ? 'edit' : 'lock'
+      return this.editable ? 'bt-edit' : 'bt-lock'
     },
     active () {
       return this.listIndex === this.filterIndex

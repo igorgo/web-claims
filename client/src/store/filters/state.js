@@ -17,11 +17,7 @@ const emptyFilter = {
 export default {
   filters: [],
   emptyFilter,
-  currentFilter: {
-    rn: null,
-    name: '',
-    ...emptyFilter
-  },
+  newFilterRn: null,
   invokedByClaims: false,
   listIndex: -1,
   doNotUpdate: false

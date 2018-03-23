@@ -6,7 +6,7 @@ export default {
   mixins: [GlobalKeyListener],
   data () {
     return {
-      eventsMap: {
+      keysMap: {
         'Ctrl+Tab': this.nextTab,
         'Ctrl+Shift+Tab': this.prevTab
       },

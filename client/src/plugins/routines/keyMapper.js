@@ -17,7 +17,12 @@ export default [
   'Ctrl+Shift+ArrowLeft',
   'Ctrl+Shift+ArrowRight',
   'Ctrl+Tab',
-  'Ctrl+Shift+Tab'
+  'Ctrl+Shift+Tab',
+  'ArrowDown',
+  'ArrowUp',
+  'Insert',
+  'F2',
+  'Escape'
 ]
 /*
 keyCodes  (http://keycode.info/)

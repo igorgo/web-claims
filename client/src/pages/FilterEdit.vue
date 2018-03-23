@@ -3,8 +3,8 @@
     <afsc-form :title="actionTitle" :tabs="tabs" paneHeight="200px" :buttons="formButtons">
       <div slot="header-actions" v-if="isEditMode">
         <span>{{'«' + filter.name + '»'}}</span>
-        <q-btn round flat outline icon="edit" @click="renameFilter"></q-btn>
-        <q-btn round flat outline icon="delete" @click="deleteFilter"></q-btn>
+        <q-btn round flat outline icon="bt-edit" @click="renameFilter"></q-btn>
+        <q-btn round flat outline icon="bt-delete" @click="deleteFilter"></q-btn>
       </div>
       <div slot="tab-0">
         <div class="row q-pb-xs">
@@ -125,7 +125,11 @@ export default {
   name: 'FilterEdit',
   data () {
     return {
-      eventsMap: {},
+      keysMap: {
+        'Escape': () => {
+          if (document.activeElement.tagName === 'BODY') this.$router.back()
+        }
+      },
       tabCount: 5,
       activeTabName: '',
       tabs: [
@@ -225,20 +229,65 @@ export default {
       },
       buildDisabled () {
         return !isOneValue(this.filter.claimRelease)
+      },
+      sessionID () {
+        return this.$store.state.auth.sessionID
       }
     },
   methods: {
-    async saveFilter () {
+    async deleteFilter () {
+      const name = this.filter.name
       try {
-        const name = await this.promptFilterName()
-        if (this.checkNewFilterName(name)) {
-          this.filter.name = name
-
-        } else {
-          this.saveFilter()
-        }
+        await this.$q.dialog({
+          title: 'Видалення',
+          message: `Ви дійсно бажаєте видалити фільтр «${name}»?`,
+          cancel: {
+            label: 'Ні',
+            color: 'positive'
+          },
+          ok: {
+            label: 'Так',
+            color: 'negative'
+          },
+          color: 'secondary'
+        })
+        await this.$request.post(
+          '/filters/delete',
+          {
+            sessionID: this.sessionID,
+            rn: this.filter.rn
+          }
+        )
+        this.$router.back()
       } catch (e) {
       }
+    },
+    async saveFilter () {
+      try {
+        if (this.isAddMode) {
+          const name = await this.promptFilterName()
+          if (!this.checkNewFilterName(name)) {
+            this.saveFilter()
+            return
+          }
+          this.filter.name = name
+        }
+        await this.postSave()
+        this.$router.back()
+      } catch (e) {
+      }
+    },
+    async postSave () {
+      try {
+        const res = await this.$request.post(
+          '/filters/save',
+          {
+            sessionID: this.sessionID,
+            filter: this.filter
+          }
+        )
+        if (this.isAddMode()) this.$store.commit('filters/setNewFilterRn', res.data.rn)
+      } catch (e) {}
     },
     clearFilter () {
       this.filter = Object.assign(this.filter, this.$store.state.filters.emptyFilter)
@@ -269,7 +318,7 @@ export default {
         const res = await this.$request.get(
           'filters/get-one',
           {
-            sessionID: this.$store.state.auth.sessionID,
+            sessionID: this.sessionID,
             rn: this.$route.params.id
           }
         )
@@ -316,10 +365,6 @@ export default {
         },
         cancel: true
       })
-    },
-    deleteFilter () {
-      // todo: confirm and delete
-      console.log('delete')
     }
   },
   created () {
