@@ -69,7 +69,7 @@ export default {
       this.scrollToActiveRecord()
     },
     addClaim () {
-      console.log('addClaim')
+      this.$router.push('/claim/new')
     },
     viewClaim () {
       this.$router.push('/claim/view/' + this.$store.getters['claims/activeClaimRecord'].id)

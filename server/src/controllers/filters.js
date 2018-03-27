@@ -17,7 +17,7 @@ async function getClaimConditionOne (req, res, next) {
   try {
     checkSession(req)
     const { sessionID, rn } = req.params
-    const nrn = parseInt(rn)
+    const nrn = rn ? parseInt(rn) : null
     const sql = `
       begin
         UDO_PACKAGE_NODEWEB_IFACE.GET_CONDITION(

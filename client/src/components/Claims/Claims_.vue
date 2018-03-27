@@ -65,7 +65,6 @@ export default {
     })
   },
   mounted: function () {
-    void this.$store.dispatch('sendClaimsRequest', {socket: this.$socket})
   },
   methods: {
     addClaim () {

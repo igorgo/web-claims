@@ -8,7 +8,7 @@
       </div>
       <div slot="tab-0">
         <div class="row q-pb-xs">
-          <afsc-input class="col" label="Номер" v-model="filter.claimNumb" mandatory/>
+          <afsc-input class="col" label="Номер" v-model="filter.claimNumb" autofocus/>
         </div>
         <div class="row q-py-xs">
           <afsc-select class="col" label="Тип" v-model="filter.claimType" :options="$routines.CLAIM_TYPE_OPTIONS"
@@ -165,6 +165,8 @@ export default {
           {
             label: 'Скасування',
             handler: () => {
+              this.$store.commit('filters/blockListUpdate', true)
+              if (this.isCondMode) this.$store.commit('claims/blockListUpdate', true)
               this.$router.back()
             }
           }
@@ -178,13 +180,11 @@ export default {
         const condButtons = [
           {
             label: 'Застосувати',
-            handler: () => {
-            }
+            handler: this.applyFilter
           },
           {
             label: 'Зберегти та застосувати',
-            handler: () => {
-            }
+            handler: this.saveAndApplyFilter
           }
         ]
         return this.isCondMode
@@ -272,7 +272,27 @@ export default {
           }
           this.filter.name = name
         }
+        void await this.postSave()
+        this.$router.back()
+      } catch (e) {
+      }
+    },
+    async saveAndApplyFilter () {
+      try {
+        const name = await this.promptFilterName()
+        if (!this.checkNewFilterName(name)) return
+        this.filter.name = name
+        const newRn = await this.postSave()
+        this.$store.commit('auth/setUserDataEntry', {key: 'LAST_COND', value: newRn})
+        this.$router.back()
+      } catch (e) {
+      }
+    },
+    async applyFilter () {
+      try {
         await this.postSave()
+        this.$store.commit('auth/setUserDataEntry', {key: 'LAST_COND', value: null})
+        this.$store.commit('filters/blockListUpdate', true)
         this.$router.back()
       } catch (e) {
       }
@@ -286,8 +306,10 @@ export default {
             filter: this.filter
           }
         )
-        if (this.isAddMode()) this.$store.commit('filters/setNewFilterRn', res.data.rn)
-      } catch (e) {}
+        if (this.isAddMode) this.$store.commit('filters/setNewFilterRn', res.data.rn)
+        return res.data.rn
+      } catch (e) {
+      }
     },
     clearFilter () {
       this.filter = Object.assign(this.filter, this.$store.state.filters.emptyFilter)
@@ -319,7 +341,7 @@ export default {
           'filters/get-one',
           {
             sessionID: this.sessionID,
-            rn: this.$route.params.id
+            rn: this.isEditMode ? this.$route.params.id : null
           }
         )
         this.filter = res.data
@@ -368,7 +390,7 @@ export default {
     }
   },
   created () {
-    if (this.isEditMode) this.getEditedFilter()
+    if (!this.isAddMode) this.getEditedFilter()
   }
 }
 </script>

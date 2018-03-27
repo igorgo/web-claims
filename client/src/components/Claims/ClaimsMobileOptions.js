@@ -52,7 +52,7 @@ export default {
                 outline: true
               },
               staticClass: 'on-right',
-              on: { click: this.onNewFilterClick }
+              on: { click: () => { this.$router.push('/filters/cond') } }
             }
           )
         ])
@@ -90,18 +90,13 @@ export default {
                 outline: true
               },
               staticClass: 'on-right',
-              on: { click: this.onSortClick }
+              on: { click: () => { this.$store.dispatch('claims/sortToggle') } }
             }
           )
         ])
       ])
     },
     onNewFilterClick () {
-      console.log('todo: invoke filter edit')
-      // todo: invoke filter edit
-    },
-    onSortClick () {
-      this.$store.dispatch('claims/sortToggle')
       console.log('todo: invoke filter edit')
       // todo: invoke filter edit
     }

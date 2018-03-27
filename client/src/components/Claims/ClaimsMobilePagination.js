@@ -15,7 +15,7 @@ export default {
               max: this.claimListPages,
               min: 1
             },
-            on: { input: this.goToPage },
+            on: { change: this.goToPage },
             staticClass: 'col-auto'
           }
         )

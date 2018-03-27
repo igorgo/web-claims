@@ -1,19 +1,19 @@
 import Routines from '../../plugins/routines'
 import restClient from '../../plugins/restClient'
 
-export const setCurrentCondition = ({commit}, value) => {
+export const setCurrentCondition = ({commit, dispatch}, value) => {
   commit('auth/setUserDataEntry', {key: 'LAST_COND', value}, { root: true })
-  // todo: renew claims set
+  dispatch('sendClaimsRequest', true)
 }
 
-export const setCurrentSort = ({commit}, value) => {
+export const setCurrentSort = ({commit, dispatch}, value) => {
   commit('auth/setUserDataEntry', {key: 'CLAIM_SORT', value}, { root: true })
-  // todo: renew claims set
+  dispatch('sendClaimsRequest', true)
 }
 
-export const sortToggle = ({commit, rootState}) => {
+export const sortToggle = ({commit, rootState, dispatch}) => {
   commit('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', value: !rootState.auth.userData['CLAIM_SORT_ORDER'] ? 1 : 0}, { root: true })
-  // todo: renew claims set
+  dispatch('sendClaimsRequest', true)
 }
 
 export const sendClaimsRequest = async ({state, commit, rootState, getters}, discardPage = false) => {
@@ -22,7 +22,6 @@ export const sendClaimsRequest = async ({state, commit, rootState, getters}, dis
     return
     // Events.$emit('claims:scroll:to:rec', { pos: state.claimRecordIndexActive })
   }
-  commit('claimListReset')
   commit('claimListReset')
   let sortStr = ''
   const currentClaimSort = getters.currentClaimSort
