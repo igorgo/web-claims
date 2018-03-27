@@ -56,7 +56,6 @@ async function getClaimConditionOne (req, res, next) {
     params.add('P_CLAIM_IM_PERF').dirOut().typeNumber()
     params.add('P_CLAIM_CONTENT').dirOut().typeString(1000)
     const result = (await db.execute(sessionID, sql, params)).outBinds
-    console.log(result)
     res.send(200, {
       rn: nrn,
       name: result['P_FILTER_NAME'],

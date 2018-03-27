@@ -25,3 +25,7 @@ export const filtersListScroll = (state, shift) => {
   const i = state.listIndex + shift
   if ((i >= 0) && (i < state.filters.length)) state.listIndex = i
 }
+
+export const blockListUpdate = (state, block) => {
+  state.doNotUpdate = block
+}

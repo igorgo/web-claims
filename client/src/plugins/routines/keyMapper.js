@@ -22,6 +22,7 @@ export default [
   'ArrowUp',
   'Insert',
   'F2',
+  'Enter',
   'Escape'
 ]
 /*

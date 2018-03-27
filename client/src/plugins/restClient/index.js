@@ -1,6 +1,8 @@
 import axios from 'axios'
-// import store from '../../store'
+import store from '../../store'
 import { Notify, Loading, QSpinnerHourglass } from 'quasar'
+
+let reqCount = 0
 
 const fullEndPoint = ep => '/api' + ((ep.charAt(0) === '/') ? '' : '/') + ep
 
@@ -11,6 +13,9 @@ const parseError = e => {
 }
 
 const showLoading = () => {
+  reqCount++
+  if (reqCount > 1) return
+  store.commit('setRestProgress')
   Loading.show({
     spinner: QSpinnerHourglass,
     delay: 50
@@ -18,6 +23,9 @@ const showLoading = () => {
 }
 
 const hideLoading = () => {
+  reqCount--
+  if (reqCount > 0) return
+  store.commit('unsetRestProgress')
   Loading.hide()
 }
 

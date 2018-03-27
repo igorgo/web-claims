@@ -12,6 +12,7 @@ export default {
   methods: {
     globalKeyListener (event) {
       // event.preventDefault()
+      if (this.$store.getters.restInProgress) return
       if (event.metaKey) return
       let shortcutCode = ''
       if (event.ctrlKey) shortcutCode += 'Ctrl+'

@@ -6,6 +6,10 @@ async function logonHandler (req, res, next) {
   let result
   try {
     result = await db.logon(user, pass)
+    const params = db.createParams()
+    params.add('IS_PMO').dirOut().typeNumber()
+    const env = await db.execute(result.sessionID, 'begin UDO_PACKAGE_NODEWEB_IFACE.SET_ENV(:IS_PMO); end;', params)
+    result.isPmo = env['outBinds']['IS_PMO']
     res.send(200, result)
   } catch (e) {
     return next(new rest.errors.UnauthorizedError(e.message))

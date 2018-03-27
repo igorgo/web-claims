@@ -1,10 +1,14 @@
 export default {
   props: {
     label: String,
-    value: String,
+    value: [String, Number],
     mandatory: Boolean,
     disable: Boolean,
-    nonClearable: Boolean
+    nonClearable: Boolean,
+    autofocus: Boolean,
+    after: Array,
+    error: Boolean,
+    warning: Boolean
   },
   computed: {
     _color () {
@@ -24,7 +28,11 @@ export default {
         'inverted-light': true,
         value: this.value,
         disable: this.disable,
-        clearable: !this.nonClearable
+        autofocus: this.autofocus,
+        after: this.after,
+        clearable: !this.nonClearable,
+        error: this.error,
+        warning: this.warning
       }
     },
     _getHandlers () {

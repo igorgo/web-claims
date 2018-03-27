@@ -9,7 +9,8 @@ export default [
       { path: '/filters', component: () => import('pages/FiltersList') },
       { path: '/filters/:mode/:id', component: () => import('pages/FilterEdit') },
       { path: '/filters/:mode', component: () => import('pages/FilterEdit') },
-      { path: '/claims', component: () => import('pages/ClaimList') }
+      { path: '/claims', component: () => import('pages/ClaimList') },
+      { path: '/claim/view/:id', component: () => import('pages/ClaimView') }
     ]
   },
 

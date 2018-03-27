@@ -34,3 +34,18 @@ export const logOff = (state) => {
 export const clearError = (state) => {
   state.authError = ''
 }
+
+export const userDataLoaded = (state, userData) => {
+  let obj = {}
+  for (let i = 0; i < userData.length; i++) {
+    const row = userData[i]
+    obj[row.name] = row.str || row.num || row.dat
+  }
+  state.userData = obj
+  saveAuthData(state)
+}
+
+export const setUserDataEntry = (state, {key, value}) => {
+  state.userData = Object.assign(state.userData, {[key]: value})
+  saveAuthData(state)
+}

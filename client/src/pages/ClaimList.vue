@@ -3,8 +3,8 @@
     <!--q-page padding v-if="$q.platform.is.mobile">
       Мобильный
     </q-page-->
-    <q-page padding>
-      <claims />
+    <q-page>
+      <claims-mobile />
     </q-page>
     <!--q-page padding v-if="$q.platform.is.desktop">
       Десктоп
@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import {Claims} from '../components'
+import {ClaimsMobile} from '../components'
 
 export default {
   // name: 'PageName',
   mounted () {
-    console.log(this.$q.platform.is)
+    // console.log(this.$q.platform.is)
   },
   components: {
-    Claims
+    ClaimsMobile
   }
 }
 </script>

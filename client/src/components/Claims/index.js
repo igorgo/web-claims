@@ -1,11 +1,11 @@
 import ClaimPaginator from './ClaimPaginator'
 import ClaimRow from './ClaimRow'
-import Claims from './Claims'
+import ClaimsMobile from './ClaimsMobile'
 import ClaimsHeader from './ClaimsHeader'
 
 export {
   ClaimRow,
   ClaimsHeader,
-  Claims,
+  ClaimsMobile,
   ClaimPaginator
 }

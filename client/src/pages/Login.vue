@@ -3,19 +3,21 @@
     <div style="max-width: 600px" class="relative-position">
       <div class="q-display-1 q-display-1-opacity">Вхід до системи</div>
       <div class="row q-my-sm">
-        <q-input
-          type="text"
+        <afsc-input
           v-model="user"
-          stack-label="Ім'я користувача"
+          label="Ім'я користувача"
           class="col"
+          mandatory
+          autofocus
         />
       </div>
       <div class="row q-my-sm">
-        <q-input
+        <afsc-input
           type="password"
           v-model="pass"
-          stack-label="Пароль"
+          label="Пароль"
           class="col"
+          mandatory
         />
       </div>
       <q-btn
@@ -30,20 +32,29 @@
 </template>
 
 <script>
+import { GlobalKeyListener, AfscInput } from '../components'
 
 export default {
   name: 'LogOn',
+  mixins: [GlobalKeyListener],
+  components: {
+    AfscInput
+  },
   data () {
     return {
       user: '',
       pass: '',
-      reqPending: false
+      reqPending: false,
+      keysMap: {
+        'Enter': this.logon
+      }
     }
   },
   methods: {
     async logon () {
       try {
         await this.$store.dispatch('auth/logon', { user: this.user, pass: this.pass })
+        await this.$store.dispatch('auth/loadUserData')
         this.$router.back()
       } catch (e) {
       }

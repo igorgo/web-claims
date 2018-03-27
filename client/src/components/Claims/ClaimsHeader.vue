@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center justify-around">
-    <div class="col-md col-sm-12 row  items-center">
-      <div class="col-10">
+    <div class="col-md col-sm-12 row items-center justify-around">
+      <div class="col-auto">
         <q-select
           stack-label="Фільтр"
           inverted
@@ -13,7 +13,7 @@
           class="no-margin"
         />
       </div>
-      <div class="col-2">
+      <div class="col-auto">
         <q-btn
           small
           round
@@ -24,7 +24,7 @@
         />
       </div>
     </div>
-    <div class="col-md col-sm-12 row  items-center">
+    <div class="col-md col-sm-12 row items-center">
       <div class="col-10">
         <q-select
           stack-label="Сортування"

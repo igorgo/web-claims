@@ -37,7 +37,7 @@ import ClaimRow from './ClaimRow.vue'
 import ClaimPaginator from './ClaimPaginator.vue'
 // import {QScrollArea, QList, QFixedPosition, QBtn, QIcon, BackToTop, TouchPan, scroll} from 'quasar-framework'
 // import {AfLoadCover, AfEventsMapper} from '../base'
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 // import {ClaimNew} from './actions'
 /* import {
   AE_CLAIMS_PAGE_LOADED,
@@ -68,37 +68,11 @@ export default {
     void this.$store.dispatch('sendClaimsRequest', {socket: this.$socket})
   },
   methods: {
-    newPortionHandler () {
-      const target = scroll.getScrollTarget(this.$refs['navigator'].$el)
-      if (target) {
-        scroll.setScrollPosition(target, 0)
-      }
-    },
-    scrollToRecord ({pos}) {
-      const target = scroll.getScrollTarget(this.$refs['navigator'].$el)
-      if (target) {
-        const activeCard = this.$refs['list'].children[pos]
-        let offset = activeCard ? activeCard.offsetTop : 0
-        offset -= Math.floor(this.$refs['scroll'].$el.clientHeight / 2)
-        offset += Math.floor(activeCard.clientHeight / 2)
-        scroll.setScrollPosition(target, offset)
-      }
-    },
     addClaim () {
       this.$refs.formNew.open()
     },
     onNewComplete () {
       void this.$store.dispatch('sendClaimsRequest', {socket: this.$socket})
-    },
-    __onKeyArrowDown () {
-      if (!this.progress && this.claimRecordIndexActive < this.claimList.length - 1) {
-        void this.$store.dispatch('claimsListScroll', 1)
-      }
-    },
-    __onKeyArrowUp () {
-      if (!this.progress && this.claimRecordIndexActive > 0) {
-        void this.$store.dispatch('claimsListScroll', -1)
-      }
     },
     __onKeyEnter () {
       if (this.progress) return
