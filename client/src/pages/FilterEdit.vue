@@ -1,6 +1,6 @@
 <template>
   <q-page class="filter-edit-form">
-    <afsc-form :title="actionTitle" :tabs="tabs" paneHeight="200px" :buttons="formButtons">
+    <afsc-form :title="actionTitle" :tabs="tabs" pane-height="200px" :buttons="formButtons" btn-min-width="90px">
       <div slot="header-actions" v-if="isEditMode">
         <span>{{'«' + filter.name + '»'}}</span>
         <q-btn round flat outline icon="bt-edit" @click="renameFilter"></q-btn>

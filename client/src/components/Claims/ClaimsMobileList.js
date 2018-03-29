@@ -1,4 +1,4 @@
-import {QList, QItem, QCard, QCardMain, scroll} from 'quasar'
+import {QList, QItem, QCard, QCardMain, QIcon, scroll} from 'quasar'
 
 export default {
   computed: {
@@ -40,13 +40,14 @@ export default {
         QCard,
         {
           staticClass: `claim-list-card text-black claim-list-card-t${claim.claimType}`,
-          props: { color: 'grey-1' }
+          props: {color: 'grey-1'}
         },
         [
+          h('div', {staticClass: `float-right claim-row-priority-corner claim-row-priority-${claim.priority}`}),
           h(
             QCardMain,
             {
-              staticClass: 'q-pa-none'
+              staticClass: 'q-pa-none claim-row-content'
             },
             [
               h(
@@ -54,24 +55,42 @@ export default {
                   staticClass: 'row justify-start'
                 }, [
                   h('div', {
-                    staticClass: 'col-sm-11 col-9'
+                    staticClass: 'col-sm-11 col-9 q-px-xs q-subheading'
                   }, [
-                    claim.unit
-                      ? claim.unit.replace(/;/g, ', ')
-                      : 'Рекламація'
+                    h('span', {}, ['№']),
+                    h('span', {staticClass: 'text-weight-bold q-pr-sm'}, [claim.numb]),
+                    h('span', {}, [claim.unit ? claim.unit.replace(/;/g, ', ') : 'Рекламація'])
                   ]),
                   h('div', {
                     staticClass: 'col-sm-1 col-3'
                   }, [
-                    h('div', { staticClass: 'float-right claim-row-priority-corner' }),
-                    h('div', {staticClass: 'claim-row-priority text-white'}, [claim.priority])
+                    // h('div', {staticClass: `float-right claim-row-priority-corner claim-row-priority-${claim.priority}`}),
+                    h('div', {staticClass: 'claim-row-priority text-white q-caption'}, [claim.priority])
+                  ])
+                ]),
+              h(
+                'div', {
+                  staticClass: 'row justify-start q-mr-lg'
+                }, [
+                  h('div', {staticClass: 'col row q-px-xs q-pb-xs items-center'}, [
+                    h('small', {staticClass: 'col-sm-6 col-12 q-mt-xs text-grey'}, [
+                      this.$routines.formatDate(claim.regDate),
+                      h('cite', {staticClass: 'q-pl-xs'}, [claim.author])
+                    ]),
+                    h('small', {staticClass: 'col-sm-6 col-12 row q-mt-xs items-center'}, [
+                      h('div', {staticClass: `col-auto q-pa-xs claim-row-status items-center row claim-row-tstatus-${claim.typicalStatus}`}, [
+                        h(QIcon, {props: {name: `bt-${['', 'hourglass', 'work-tools', 'round-done', 'round-cancel'][claim.typicalStatus]}`}}),
+                        h('span', {staticClass: 'q-pl-xs'}, [claim.status])
+                      ]),
+                      h('span', {staticClass: 'q-pl-xs'}, [claim.executor])
+                    ])
                   ])
                 ])
             ])
         ])
     },
     _getList (h) {
-      return h(QList, { props: { noBorder: true }, ref: 'list' }, this._getRows(h))
+      return h(QList, {props: {noBorder: true}, ref: 'list'}, this._getRows(h))
     },
     onClaimClick (idx) {
       // todo: onClaimClick

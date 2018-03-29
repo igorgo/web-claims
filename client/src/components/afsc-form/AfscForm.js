@@ -20,6 +20,10 @@ export default {
       type: String,
       default: '50px'
     },
+    btnMinWidth: {
+      type: String,
+      default: '50px'
+    },
     buttons: Array
   },
   computed: {
@@ -63,7 +67,7 @@ export default {
                 'keep-alive': true
               },
               style: {
-                'min-height': this.paneHeight || '50px'
+                'min-height': this.paneHeight
               }
             },
             [this.$slots[name]]
@@ -75,17 +79,15 @@ export default {
     _makeButtons (h) {
       if (!this.buttons) return []
       let buttons = []
-      const btnCnt = this.buttons.length
+      // const btnCnt = this.buttons.length
       for (let i = 0; i < this.buttons.length; i++) {
         buttons.push(
           h(
             QBtn,
             {
-              staticClass: 'col',
-              'class': {
-                'q-mr-xs': i === 0 && btnCnt > 1,
-                'q-mx-xs': i > 0 && i < btnCnt - 1,
-                'q-ml-xs': i === btnCnt - 1 && btnCnt > 1
+              staticClass: 'col q-ma-xs',
+              style: {
+                'min-width': this.btnMinWidth
               },
               props: {
                 'no-caps': true,
