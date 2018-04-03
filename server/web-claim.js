@@ -55,9 +55,11 @@ process.on('SIGHUP', async () => {
 })
 
 process.on('uncaughtException', async err => {
+  console.log(err)
   await shutdown(2)
 })
 process.on('unhandledRejection', async err => {
+  console.log(err)
   await shutdown(2)
 })
 

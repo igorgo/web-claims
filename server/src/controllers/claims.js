@@ -2,6 +2,47 @@ const rest = require('../rest')
 const db = require('../db')
 const { checkSession } = require('./checkAuth')
 
+async function claimsFindOne (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+      select trim(S01) as "claimPrefix",
+             trim(S02) as "claimNumber",
+             S03 as "claimType",
+             S04 as "claimState",
+             S05 as "registeredByAgent",
+             S06 as "changedByAgent",
+             S07 as "executor",
+             S08 as "buildFrom",
+             S09 as "buildToComb",
+             S10 as "unit",
+             S11 as "app",
+             S12 as "action",
+             S13 as "content",
+             S14 as "relFrom",
+             S15 as "relTo",
+             S16 as "buildTo",
+             N01 as "id",
+             N02 as "priority",
+             N03 as "helpSign",
+             N04 as "claimTypeId",
+             N05 as "exexGroupSign",
+             D01 as "registeredAt",
+             D02 as "changedAt",
+             D03 as "execTill"
+        from table(UDO_PACKAGE_NODEWEB_IFACE.GET_CLAIM_RECORD(:RN))
+  `
+    const params = db.createParams()
+    params.add('RN').dirIn().typeNumber().val(id)
+    const result = await db.execute(sessionID, sql, params)
+    const response = result.rows.length ? result.rows[0] : { id: null }
+    res.send(200, response)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
 async function claimsFind (req, res, next) {
   try {
     checkSession(req)
@@ -64,4 +105,69 @@ async function claimsFind (req, res, next) {
   }
 }
 
+async function getFiles (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const params = db.createParams()
+    params.add('RN').dirIn().typeNumber().val(id)
+    const result = await db.execute(sessionID, `
+      select S01 as "path",
+             N01 as "id",
+             N02 as "sizeBite",
+             N03 as "own" 
+        from table(UDO_PACKAGE_NODEWEB_IFACE.GET_CLAIM_FILES(:RN))`, params)
+    res.send(200, {id, files: result.rows})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function getHistory (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const params = db.createParams()
+    params.add('RN').dirIn().typeNumber().val(id)
+    const result = await db.execute(sessionID, `
+    select D01 as "date",
+           S03 as "who",
+           S04 as "newStatus",
+           S05 as "newExecutor",
+           S06 as "comment",
+           N02 as "noteId",
+           N03 as "statusType"
+      from table(UDO_PACKAGE_NODEWEB_IFACE.CLAIM_HISTORY(:RN))  
+      `, params)
+    res.send(200, {id, history: result.rows})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function getActions (req, res, next) {
+  try {
+    checkSession(req)
+    const {sessionID, id} = req.params
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NACTIONMASK').dirOut().typeNumber()
+    const result = await db.execute(sessionID, `
+      begin
+        UDO_PACKAGE_NODEWEB_IFACE.GET_AVAIL_ACTIONS(
+          NRN         => :NRN,
+          NACTIONMASK => :NACTIONMASK
+        );
+      end;
+    `, params)
+    res.send(200, {id, actionsMask: result.outBinds['NACTIONMASK']})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/actions', getActions)
+rest.post('/claims/history', getHistory)
+rest.post('/claims/files', getFiles)
 rest.post('/claims/find', claimsFind)
+rest.post('/claims/find-one', claimsFindOne)

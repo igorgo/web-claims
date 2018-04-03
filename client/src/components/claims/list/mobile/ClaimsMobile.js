@@ -1,7 +1,7 @@
 import ClaimsMobileOptions from './ClaimsMobileOptions'
 import ClaimsMobileList from './ClaimsMobileList'
 import ClaimsMobilePagination from './ClaimsMobilePagination'
-import {GlobalKeyListener} from '..'
+import {GlobalKeyListener, AfscBackToTop, AfscTouchPan} from '../../../index'
 import {QScrollArea, QPageSticky, QBtn} from 'quasar'
 
 export default {
@@ -25,13 +25,22 @@ export default {
   },
   render (h) {
     return h(
-      'div', [
+      AfscTouchPan, {props: {handler: this.onPanning}}, [
         h(QScrollArea, {
           staticClass: 'claim-list-body q-px-md q-pt-md',
           ref: 'scroll-target'
         }, [
           this._drawOptions(h),
-          this._getList(h)
+          this._getList(h),
+          h(
+            AfscBackToTop,
+            {
+              props: {
+                xPos: 68,
+                yPos: 18
+              }
+            }
+          )
         ]),
         this._getPagination(h),
         h(
@@ -73,6 +82,15 @@ export default {
     },
     viewClaim () {
       this.$router.push('/claim/view/' + this.$store.getters['claims/activeClaimRecord'].id)
+    },
+    onPanning (obj) {
+      if (obj.isFinal) {
+        if (obj.direction === 'left') {
+          if (this.currentClaimPage !== this.claimListPages) this.goToPage(this.currentClaimPage + 1)
+        } else {
+          if (this.currentClaimPage !== 1) this.goToPage(this.currentClaimPage - 1)
+        }
+      }
     }
   },
   created: function () {

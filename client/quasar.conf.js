@@ -84,7 +84,8 @@ module.exports = function (ctx) {
       directives: [
         'Ripple',
         'TouchPan',
-        'BackToTop'
+        'BackToTop',
+        'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [
@@ -93,7 +94,8 @@ module.exports = function (ctx) {
         'Loading',
         'Dialog',
         'Platform'
-      ]
+      ],
+      i18n: 'uk'
     },
     // animations: 'all' --- includes all animations
     animations: [

@@ -74,6 +74,24 @@ const restClient = {
     } finally {
       if (sync) hideLoading()
     }
+  },
+  down: async (endPoint, params) => {
+    try {
+      return await axios.request({
+        url: fullEndPoint(endPoint),
+        method: 'post',
+        headers: { 'content-type': 'application/json' },
+        responseType: 'blob',
+        params
+      })
+    } catch (e) {
+      const message = parseError(e)
+      Notify.create({
+        message,
+        type: 'negative'
+      })
+      throw new Error(message)
+    }
   }
 }
 

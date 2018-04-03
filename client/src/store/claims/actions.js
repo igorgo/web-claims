@@ -11,8 +11,8 @@ export const setCurrentSort = ({commit, dispatch}, value) => {
   dispatch('sendClaimsRequest', true)
 }
 
-export const sortToggle = ({commit, rootState, dispatch}) => {
-  commit('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', value: !rootState.auth.userData['CLAIM_SORT_ORDER'] ? 1 : 0}, { root: true })
+export const sortToggle = ({commit, rootState, dispatch, getters}) => {
+  commit('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', value: getters.isSortOrderDesc ? 0 : 1}, { root: true })
   dispatch('sendClaimsRequest', true)
 }
 
@@ -45,4 +45,68 @@ export const sendClaimsRequest = async ({state, commit, rootState, getters}, dis
 export const setCurrentPage = async ({dispatch, commit}, page) => {
   commit('setCurrentPage', page)
   await dispatch('sendClaimsRequest')
+}
+
+export const getClaimRecord = async ({commit, getters, dispatch}, id) => {
+  commit('beforeGetRecord')
+  const res = await restClient.post('/claims/find-one', {
+    sessionID: getters.sessionID,
+    id
+  })
+  commit('afterGetRecord', res.data)
+  void dispatch('getClaimFiles', id)
+  void dispatch('getClaimHistory', id)
+  void dispatch('getClaimActions', id)
+}
+
+export const getClaimFiles = async ({getters, commit}, id) => {
+  const res = await restClient.post('/claims/files', {
+    sessionID: getters.sessionID,
+    id
+  }, false)
+  commit('afterGetFiles', res.data)
+}
+
+export const getClaimHistory = async ({getters, commit}, id) => {
+  const res = await restClient.post('/claims/history', {
+    sessionID: getters.sessionID,
+    id
+  }, false)
+  commit('afterGetHistory', res.data)
+}
+
+export const getClaimActions = async ({getters, commit}, id) => {
+  const res = await restClient.post('/claims/actions', {
+    sessionID: getters.sessionID,
+    id
+  }, false)
+  commit('afterGetActionsMask', res.data)
+}
+
+export const viewNextClaim = async ({state, commit, dispatch}) => {
+  let idx = state.activeRecordIndex
+  if (state.activeRecordIndex < state.claimList.length - 1) {
+    idx++
+    commit('setActiveRecordIndex', idx)
+    return state.claimList[idx].id
+  } else if (state.currentClaimPage !== state.claimListPages) {
+    await dispatch('setCurrentPage', state.currentClaimPage + 1)
+    if (state.claimList.length) return state.claimList[idx].id
+  } else return null
+}
+
+export const viewPrevClaim = async ({state, commit, dispatch}) => {
+  let idx = state.activeRecordIndex
+  if (state.activeRecordIndex > 0) {
+    idx--
+    commit('setActiveRecordIndex', idx)
+    return state.claimList[idx].id
+  } else if (state.currentClaimPage !== 1) {
+    await dispatch('setCurrentPage', state.currentClaimPage - 1)
+    idx = state.claimList.length - 1
+    if (idx >= 0) {
+      commit('setActiveRecordIndex', idx)
+      return state.claimList[idx].id
+    }
+  } else return null
 }

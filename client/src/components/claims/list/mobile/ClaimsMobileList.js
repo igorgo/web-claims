@@ -44,6 +44,9 @@ export default {
         },
         [
           h('div', {staticClass: `float-right claim-row-priority-corner claim-row-priority-${claim.priority}`}),
+          claim.hasDocs
+            ? h(QIcon, {staticClass: 'claim-list-attach', props: {name: 'bt-attach'}})
+            : null,
           h(
             QCardMain,
             {
@@ -64,7 +67,6 @@ export default {
                   h('div', {
                     staticClass: 'col-sm-1 col-3'
                   }, [
-                    // h('div', {staticClass: `float-right claim-row-priority-corner claim-row-priority-${claim.priority}`}),
                     h('div', {staticClass: 'claim-row-priority text-white q-caption'}, [claim.priority])
                   ])
                 ]),
@@ -79,7 +81,7 @@ export default {
                     ]),
                     h('small', {staticClass: 'col-sm-6 col-12 row q-mt-xs items-center'}, [
                       h('div', {staticClass: `col-auto q-pa-xs claim-row-status items-center row claim-row-tstatus-${claim.typicalStatus}`}, [
-                        h(QIcon, {props: {name: `bt-${['', 'hourglass', 'work-tools', 'round-done', 'round-cancel'][claim.typicalStatus]}`}}),
+                        h(QIcon, {props: {name: `bt-${['', 'time-wait', 'processing', 'round-done', 'round-cancel'][claim.typicalStatus]}`}}),
                         h('span', {staticClass: 'q-pl-xs'}, [claim.status])
                       ]),
                       h('span', {staticClass: 'q-pl-xs'}, [claim.executor])
@@ -93,7 +95,6 @@ export default {
       return h(QList, {props: {noBorder: true}, ref: 'list'}, this._getRows(h))
     },
     onClaimClick (idx) {
-      // todo: onClaimClick
       this.$store.commit('claims/setActiveRecordIndex', idx)
       this.viewClaim()
     },

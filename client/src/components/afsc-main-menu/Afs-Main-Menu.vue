@@ -17,13 +17,13 @@
       <q-item-side icon="bt-home"/>
       <q-item-main label="Головна"/>
     </q-item>
-    <q-item v-if="authorized" to="/filters">
-      <q-item-side icon="bt-filter"/>
-      <q-item-main label="Управління фільтрами"/>
-    </q-item>
     <q-item v-if="authorized" to="/claims">
       <q-item-side icon="bt-issue"/>
       <q-item-main label="Рекламаціїї"/>
+    </q-item>
+    <q-item v-if="authorized" to="/filters">
+      <q-item-side icon="bt-filter"/>
+      <q-item-main label="Управління фільтрами"/>
     </q-item>
     <q-item v-if="authorized" @click.native="logoff">
       <q-item-side icon="bt-sign-out"/>

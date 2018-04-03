@@ -1,4 +1,4 @@
-import {AfscSelect} from '..'
+import {AfscSelect} from '../../../index'
 import {QBtn} from 'quasar'
 
 export default {

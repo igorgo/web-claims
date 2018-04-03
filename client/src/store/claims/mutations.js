@@ -40,3 +40,32 @@ export const setCurrentPage = (state, page) => {
   state.currentClaimPage = page
   SessionStorage.set('currentClaimPage', page)
 }
+
+export const beforeGetRecord = (state) => {
+  state.claimRecord = { id: null }
+  state.claimFiles = []
+  state.claimHistory = []
+  state.actionsMask = 0
+}
+
+export const afterGetRecord = (state, claim) => {
+  state.claimRecord = claim
+}
+
+export const afterGetFiles = (state, {id, files}) => {
+  if (state.claimRecord.id === id) {
+    state.claimFiles = files
+  }
+}
+
+export const afterGetHistory = (state, {id, history}) => {
+  if (state.claimRecord.id === id) {
+    state.claimHistory = history
+  }
+}
+
+export const afterGetActionsMask = (state, {id, actionsMask}) => {
+  if (state.claimRecord.id === id) {
+    state.actionsMask = actionsMask
+  }
+}

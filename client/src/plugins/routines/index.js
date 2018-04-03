@@ -144,17 +144,26 @@ function formatDate (str) {
   return date.isValid(str) ? date.formatDate(new Date(str), 'DD.MM.YYYY') : str
 }
 
+function formatDateTime (str) {
+  return date.isValid(str) ? date.formatDate(new Date(str), 'DD.MM.YYYY HH:mm:ss') : str
+}
+
+function formatOnlyTime (str, sec = true) {
+  const fs = sec ? 'HH:mm:ss' : 'HH:mm'
+  return date.isValid(str) ? date.formatDate(new Date(str), fs) : str
+}
+
 function formatDateFull (str) {
   return date.isValid(str)
     ? date.formatDate(
       new Date(str),
       'D MMMM YYYY, dddd',
-      {dayNames: DAY_NAMES, monthNames: MONTH_NAMES}
+      { dayNames: DAY_NAMES, monthNames: MONTH_NAMES }
     )
     : str
 }
 
-function mapEvents ({keysMap, $root}, listen) {
+function mapEvents ({ keysMap, $root }, listen) {
   if (!keysMap) return
   for (let i in keysMap) {
     if (keysMap.hasOwnProperty(i)) {
@@ -164,10 +173,67 @@ function mapEvents ({keysMap, $root}, listen) {
   }
 }
 
+function hrFileSize (bites) {
+  if (isNaN(bites)) {
+    throw new Error('Invalid number')
+  }
+
+  let result = []
+
+  const symbol = ['байт', 'Kб', 'Mб', 'Гб']
+  let e = Math.floor(Math.log(bites) / Math.log(1024))
+  if (e > 3) {
+    e = 3
+  }
+  if (bites === 0) {
+    result[0] = 0
+    result[1] = symbol[0]
+  } else {
+    const val = bites / Math.pow(2, e * 10)
+    result[0] = Number(val.toFixed(e > 0 ? 2 : 0))
+    result[1] = symbol[e]
+  }
+  return result.join(' ')
+}
+
+function saveFile (data, filename, mime) {
+  const blob = new Blob([data], {type: mime || 'application/octet-stream'})
+  if (typeof window.navigator.msSaveBlob !== 'undefined') {
+    // IE workaround for "HTML7007: One or more blob URLs were
+    // revoked by closing the blob for which they were created.
+    // These URLs will no longer resolve as the data backing
+    // the URL has been freed."
+    window.navigator.msSaveBlob(blob, filename)
+  } else {
+    const blobURL = window.URL.createObjectURL(blob)
+    const tempLink = document.createElement('a')
+    tempLink.style.display = 'none'
+    tempLink.href = blobURL
+    tempLink.setAttribute('download', filename)
+
+    // Safari thinks _blank anchor are pop ups. We only want to set _blank
+    // target if the browser does not support the HTML5 download attribute.
+    // This allows you to download files in desktop safari if pop up blocking
+    // is enabled.
+    if (typeof tempLink.download === 'undefined') {
+      tempLink.setAttribute('target', '_blank')
+    }
+
+    document.body.appendChild(tempLink)
+    tempLink.click()
+    document.body.removeChild(tempLink)
+    window.URL.revokeObjectURL(blobURL)
+  }
+}
+
 export default {
-  formatDate: formatDate,
-  formatDateFull: formatDateFull,
-  mapEvents: mapEvents,
+  saveFile,
+  formatDate,
+  formatDateFull,
+  formatDateTime,
+  formatOnlyTime,
+  mapEvents,
+  hrFileSize,
   SORT_OPTIONS,
   HELP_STATUS,
   HELP_NEED_OPTIONS,

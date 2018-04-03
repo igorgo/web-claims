@@ -1,0 +1,143 @@
+.claim-nav-wrapper
+  border-bottom $primary 1px solid
+  padding-bottom 8px
+.claim-scroll-area
+  height calc(100vh - 128px)
+.claim-fields-table
+  padding 2px
+  font-size 0.8em
+  width 100%
+  border 2px solid $primary
+  border-radius 5px
+.claim-fields-td
+  border-radius 3px
+  padding 4px 4px
+  width 50%
+.claim-fields-dt-lbl
+  font-weight 500
+  text-align right
+  // background-color $lime-2
+  background-color $secondary-9
+  color $black
+.claim-fields-dt-val
+  text-align left
+  background-color $primary
+  color $white
+.claim-text
+  border-left 3px solid $primary
+
+.claim-comment
+  padding 6px
+  background-color $primary-9
+  font-family monospace, monospace
+  font-size 0.8em
+  font-weight 400
+  white-space pre-wrap
+  cite
+    font-size 1em
+.claim-hist-status
+  font-size 0.8em
+  font-weight 700
+
+.claim-hist
+  padding 0 8px
+  width 100%
+  list-style none
+  h6
+    line-height inherit
+
+.claim-hist-title
+  margin-top 0
+  margin-bottom 8px
+
+.claim-hist-subtitle
+  font-size 0.8em
+  opacity .4
+  text-transform uppercase
+  letter-spacing 1px
+  font-weight 700
+
+.claim-hist-dot
+  position absolute
+  top 0
+  bottom 0
+  left 0
+  width 15px
+  &:before, &:after
+    content ''
+    background currentColor
+    display block
+    position absolute
+  &:before
+    border 3px solid transparent
+    border-radius 100%
+    height 15px
+    width 15px
+    top 4px
+    left 0
+    transition background .3s ease-in-out, border .3s ease-in-out
+  &:after
+    width 3px
+    opacity .4
+    top 24px
+    bottom 0
+    left 6px
+
+.claim-hist-entry-with-icon
+  .claim-hist-dot
+    width 31px
+    left -8px
+    &:before
+      height 31px
+      width 31px
+    &:after
+      top 41px
+      left 14px
+    .q-icon
+      position absolute
+      top 8px
+      left 4px
+      font-size 23px
+      color white
+      transition color .3s ease-in-out
+  .claim-hist-subtitle
+    padding-top 8px
+
+.claim-hist-dark
+  color white
+  .claim-hist-subtitle
+    opacity .7
+
+.claim-hist-entry
+  padding-left 40px
+  position relative
+  line-height 18px
+  &:last-child
+    padding-bottom 0
+    .claim-hist-dot:after
+      content none
+  &:hover
+    .claim-hist-dot:before
+      background transparent
+      border 3px solid currentColor
+  &.claim-hist-entry-with-icon:hover .claim-hist-dot .q-icon
+    color currentColor
+
+.claim-hist-content
+  padding-bottom 8px
+
+.claim-hist-heading
+  position relative
+  &:first-child .claim-hist-heading-title
+    padding-top 0
+  &:last-child .claim-hist-heading-title
+    padding-bottom 0
+.claim-hist-heading-title
+  padding 32px 0
+  margin 0
+
+.claim-author
+  opacity .7
+  font-size 0.8em
+  font-weight 700
+  font-family: monospace, monospace

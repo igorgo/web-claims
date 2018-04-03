@@ -55,6 +55,12 @@
   right 8px
   font-size 12px
   font-weight 400
+.claim-list-attach
+  position absolute
+  bottom 10px
+  right 8px
+  font-size 16px
+  transform scaleX(-1)
 
 $priorColors = $green-5,
                $green-6,
@@ -73,14 +79,14 @@ for i in (1..10)
     border-top-color $priorColors[(i)]
 
 $tStatusBg = $light,
-             $warning,
-             $info,
-             $positive,
-             $negative
+             $orange,
+             $indigo,
+             $green,
+             $red
 
-$tStatusFg = $grey-10,
-             $grey-10,
-             $grey-10,
+$tStatusFg = $white,
+             $white,
+             $white,
              $white,
              $white
 

@@ -1,21 +1,24 @@
 <template>
-  <q-page padding>
-    <q-btn
-      :label="$route.params.id"
-      @click="goBack"
+  <q-page>
+    <claim-view
+      :id="parseInt($route.params.id)"
     />
   </q-page>
 </template>
 
 <script>
+import {ClaimView} from '../components'
+
 export default {
   // name: 'PageName',
-  methods: {
-    goBack () {
-      this.$store.commit('filters/blockListUpdate', true)
-      this.$store.commit('claims/blockListUpdate', true)
-      this.$router.back()
+  components: {
+    ClaimView
+  },
+  data () {
+    return {
     }
+  },
+  methods: {
   }
 }
 </script>
