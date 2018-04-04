@@ -9,7 +9,7 @@ import ClaimActions from './claim-actions'
 import methods from './methods'
 import computed from './computed'
 import hooks from './hooks'
-import {AfscBackToTop, AfscTouchPan} from '../..'
+import {AfscBackToTop, AfscTouchPan, GlobalKeyListener} from '../..'
 export default {
   name: 'claim-view',
   data () {
@@ -21,7 +21,14 @@ export default {
         {color: 'indigo', icon: 'processing'}, // 2
         {color: 'green', icon: 'round-done'}, //  3
         {color: 'red', icon: 'round-cancel'} //   4
-      ]
+      ],
+      keysMap: {
+        'ArrowDown': this.onScrollDown,
+        'ArrowUp': this.onScrollUp,
+        'Ctrl+ArrowLeft': this.goToPrevRecord,
+        'Ctrl+ArrowRight': this.goToNextRecord,
+        'Ctrl+Backspace': this.backToList
+      }
     }
   },
   props: {
@@ -31,6 +38,7 @@ export default {
     methods,
     computed,
     hooks,
+    GlobalKeyListener,
     ClaimNavigator,
     ClaimFieldsInfo,
     ClaimRequisites,

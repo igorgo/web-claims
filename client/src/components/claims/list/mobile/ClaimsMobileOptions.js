@@ -95,10 +95,6 @@ export default {
           )
         ])
       ])
-    },
-    onNewFilterClick () {
-      console.log('todo: invoke filter edit')
-      // todo: invoke filter edit
     }
   },
   computed: {

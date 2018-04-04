@@ -24,7 +24,7 @@ export default {
     },
     drawFieldsInfo (h) {
       if (!this.record.id) return
-      return h('div', {staticClass: 'q-py-sm row justify-around'}, [
+      return h('div', {staticClass: 'q-py-sm row justify-around', ref: 'FieldsInfo'}, [
         this._drawFieldsList(h, [
           { label: 'Тип рекламації', value: this.record.claimType },
           { label: 'Рекламація №', value: this.record.claimPrefix + '-' + this.record.claimNumber },

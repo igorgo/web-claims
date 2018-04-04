@@ -1,15 +1,25 @@
 <template>
   <q-page padding>
+    <div>
     <q-btn
-      label=" New Claim "
+      label=" <- "
       @click="$router.back()"
     />
+    </div>
+    <div>
+      <claim-form-add/>
+    </div>
   </q-page>
 </template>
 
 <script>
+import {ClaimFormAdd} from '../components'
+
 export default {
-  // name: 'PageName',
+  name: 'PageAddClaim',
+  components: {
+    ClaimFormAdd
+  }
 }
 </script>
 

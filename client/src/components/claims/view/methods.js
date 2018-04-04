@@ -1,3 +1,5 @@
+import {scroll} from 'quasar'
+
 export default {
   methods: {
     requestRecord () {
@@ -44,13 +46,25 @@ export default {
       console.log('todo: editComment')
     },
     doAction (actionCode) {
-      // todo: editComment
+      // todo: doAction
       console.log(`todo: doAction( ${actionCode} )`)
     },
     onPanning (obj) {
       if (obj.isFinal) {
         if (obj.direction === 'left') this.goToNextRecord()
         else this.goToPrevRecord()
+      }
+    },
+    onScrollDown () {
+      this.__scroll(true)
+    },
+    onScrollUp () {
+      this.__scroll(false)
+    },
+    __scroll (down) {
+      const target = scroll.getScrollTarget(this.$refs['FieldsInfo'])
+      if (target) {
+        scroll.setScrollPosition(target, scroll.getScrollPosition(target) + (down ? 50 : -50))
       }
     }
   }

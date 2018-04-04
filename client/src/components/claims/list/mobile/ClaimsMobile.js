@@ -12,7 +12,9 @@ export default {
         'ArrowDown': this._onKeyArrowDown,
         'ArrowUp': this._onKeyArrowUp,
         'Insert': this.addClaim,
-        'Enter': () => { this.viewClaim(null) }
+        'Enter': () => { this.viewClaim(null) },
+        'Ctrl+ArrowLeft': this.toPrevPage,
+        'Ctrl+ArrowRight': this.toNextPage
       }
     }
   },
@@ -86,11 +88,17 @@ export default {
     onPanning (obj) {
       if (obj.isFinal) {
         if (obj.direction === 'left') {
-          if (this.currentClaimPage !== this.claimListPages) this.goToPage(this.currentClaimPage + 1)
+          this.toNextPage()
         } else {
-          if (this.currentClaimPage !== 1) this.goToPage(this.currentClaimPage - 1)
+          this.toPrevPage()
         }
       }
+    },
+    toNextPage () {
+      if (this.currentClaimPage !== this.claimListPages) this.goToPage(this.currentClaimPage + 1)
+    },
+    toPrevPage () {
+      if (this.currentClaimPage !== 1) this.goToPage(this.currentClaimPage - 1)
     }
   },
   created: function () {

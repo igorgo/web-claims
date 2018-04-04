@@ -16,8 +16,11 @@
 export default [
   'Ctrl+Shift+ArrowLeft',
   'Ctrl+Shift+ArrowRight',
+  'Ctrl+ArrowLeft',
+  'Ctrl+ArrowRight',
   'Ctrl+Tab',
   'Ctrl+Shift+Tab',
+  'Ctrl+Backspace',
   'ArrowDown',
   'ArrowUp',
   'Insert',
