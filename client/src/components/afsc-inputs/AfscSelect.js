@@ -5,7 +5,8 @@ export default {
   name: 'afsc-select',
   props: {
     options: Array,
-    multiple: Boolean
+    multiple: Boolean,
+    value: [String, Number, Array]
   },
   mixins: [InputMixin],
   render (h) {
@@ -19,7 +20,7 @@ export default {
         }),
         on: Object.assign(this._getHandlers(), {
           input: (val) => {
-            const newValue = this.multiple
+            const newValue = this.multiple && (typeof val === 'string')
               ? val.join(';')
               : val
             this.$emit('input', newValue)
@@ -31,7 +32,9 @@ export default {
   computed: {
     _value () {
       return this.multiple
-        ? this.value ? this.value.split(';') : []
+        ? this.value && (typeof this.value === 'string')
+          ? this.value.split(';')
+          : Array.isArray(this.value) ? this.value : []
         : this.value
     }
   }

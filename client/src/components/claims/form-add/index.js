@@ -8,7 +8,9 @@ export default {
     return {
       currentStep: '0',
       cType: 'ДОРАБОТКА',
-      cUnit: ''
+      cUnit: '',
+      cApp: [],
+      cFunc: []
     }
   },
   render (h) {
@@ -30,7 +32,7 @@ export default {
           name: '0',
           default: true,
           title: 'Тип',
-          subtitle: this.currentStep > '0' ? this.cType : '',
+          subtitle: this.currentStep > '0' ? this.typeMap.get(this.cType) : '',
           ...icons
         }
       }, [
@@ -76,6 +78,9 @@ export default {
           on: {
             input: val => {
               this.cUnit = val
+              this.cApp = []
+              this.cFunc = []
+              this.$store.dispatch('staticData/getAppsByUnits', val)
             }
           }
         }),
@@ -83,10 +88,12 @@ export default {
           props: {
             label: 'Застосунок',
             mandatory: true,
-            disable: !this.cUnit,
+            disable: !this.cUnit || this.appsByUnit.length === 0,
             multiple: true,
-            options: []
-          }
+            options: this.appsByUnit,
+            value: this.cApp
+          },
+          on: {input: val => { this.cApp = val }}
         }),
         h(QStepperNavigation, [
           h(QBtn, {

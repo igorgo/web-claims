@@ -39,3 +39,26 @@ export const getPersonList = async ({commit, rootState}) => {
   } catch (e) {
   }
 }
+
+export const getAppsByUnits = ({commit, rootState}, units) => {
+  commit('clearUnitAppAndFunc')
+  clearTimeout(this.timerUnitChange)
+  this.timerUnitChange = setTimeout(
+    async () => {
+      if (!units) return
+      restClient.get('/dicts/apps-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
+        .then(
+          resp => { commit('setUnitApps', resp.data) },
+          e => {}
+        )
+      if (units.split(';').length > 1) return
+      restClient.get('/dicts/func-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
+        .then(
+          resp => { commit('setUnitFunc', resp.data) },
+          e => {}
+        )
+    },
+    1000,
+    units
+  )
+}

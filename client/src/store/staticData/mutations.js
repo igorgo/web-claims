@@ -40,6 +40,19 @@ export const setReleases = (state, buildList) => {
   saveStaticData(state)
 }
 
+export const clearUnitAppAndFunc = (state) => {
+  state.unitApps = []
+  state.unitFuncs = []
+}
+
+export const setUnitApps = (state, apps) => {
+  state.unitApps = apps
+}
+
+export const setUnitFunc = (state, func) => {
+  state.unitFunc = func
+}
+
 export const resetStaticData = (state) => {
   state.claimStatuses = []
   state.appList = []

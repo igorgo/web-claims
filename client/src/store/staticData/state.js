@@ -9,5 +9,7 @@ const savedStaticData = SessionStorage.has('staticData') ? SessionStorage.get.it
 }
 
 export default {
-  ...savedStaticData
+  ...savedStaticData,
+  unitApps: [],
+  unitFuncs: []
 }

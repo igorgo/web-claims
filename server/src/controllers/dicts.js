@@ -67,8 +67,42 @@ async function getPersons (req, res, next) {
   }
 }
 
+async function getAppsByUnits (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, unit } = req.params
+    const params = db.createParams()
+    params.add('UNITS').dirIn().typeString().val(unit)
+    const result = await db.execute(sessionID, `
+      select
+        S01 as "appName"
+      from table(UDO_PACKAGE_NODEWEB_IFACE.GET_APPS_BY_UNIT(:UNITS))`, params)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function getFuncByUnits (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, unit } = req.params
+    const params = db.createParams()
+    params.add('UNIT').dirIn().typeString().val(unit)
+    const result = await db.execute(sessionID, `
+      select
+        S01 as "funcName"
+      from table(UDO_PACKAGE_NODEWEB_IFACE.GET_FUNCS_BY_UNIT(:UNIT))`, params)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
 rest.get('/dicts/claim-statuses', getClaimStatuses)
 rest.get('/dicts/app-list', getAppList)
 rest.get('/dicts/unit-list', getUnitList)
 rest.get('/dicts/build-list', getBuilds)
 rest.get('/dicts/person-list', getPersons)
+rest.get('/dicts/apps-by-unit', getAppsByUnits)
+rest.get('/dicts/func-by-unit', getFuncByUnits)
