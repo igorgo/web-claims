@@ -15,6 +15,12 @@ export default {
         label: i.appName,
         value: i.appName
       }))
+    },
+    funcByUnit () {
+      return this.$store.state.staticData.unitFuncs.map(i => ({
+        label: i.funcName,
+        value: i.funcName
+      }))
     }
   }
 }

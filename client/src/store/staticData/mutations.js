@@ -50,7 +50,7 @@ export const setUnitApps = (state, apps) => {
 }
 
 export const setUnitFunc = (state, func) => {
-  state.unitFunc = func
+  state.unitFuncs = func
 }
 
 export const resetStaticData = (state) => {
