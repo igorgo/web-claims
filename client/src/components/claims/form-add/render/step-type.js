@@ -34,7 +34,7 @@ export default {
        <li>невідповідність функціоналу документації або контекстної довідці.</li>
     </ul>   
   </li>
-</ul>  
+</ul>
           `
               }
             })
@@ -54,7 +54,7 @@ export default {
             }
           }
         }),
-        this.drawNavigator(h, true)
+        this.drawNavigator(h, {first: true, valid: !!this.cType})
       ])
     }
   }

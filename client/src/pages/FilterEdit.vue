@@ -283,7 +283,7 @@ export default {
         if (!this.checkNewFilterName(name)) return
         this.filter.name = name
         const newRn = await this.postSave()
-        this.$store.commit('auth/setUserDataEntry', {key: 'LAST_COND', value: newRn})
+        this.$store.dispatch('auth/setUserDataEntry', {key: 'LAST_COND', type: 'N', value: newRn})
         this.$router.back()
       } catch (e) {
       }
@@ -291,7 +291,7 @@ export default {
     async applyFilter () {
       try {
         await this.postSave()
-        this.$store.commit('auth/setUserDataEntry', {key: 'LAST_COND', value: null})
+        this.$store.dispatch('auth/setUserDataEntry', {key: 'LAST_COND', type: 'N', value: null})
         this.$store.commit('filters/blockListUpdate', true)
         this.$router.back()
       } catch (e) {

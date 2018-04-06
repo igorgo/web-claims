@@ -10,8 +10,10 @@ export default {
         activeIcon: 'bt-current-location'
       },
       currentStep: '0',
-      cType: 'ДОРАБОТКА',
+      cType: '',
       cUnit: '',
+      cRelFrom: '',
+      cBldFrom: '',
       cApp: [],
       cFunc: []
     }

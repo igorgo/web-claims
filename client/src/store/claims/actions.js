@@ -2,17 +2,17 @@ import Routines from '../../plugins/routines'
 import restClient from '../../plugins/restClient'
 
 export const setCurrentCondition = ({commit, dispatch}, value) => {
-  commit('auth/setUserDataEntry', {key: 'LAST_COND', value}, { root: true })
+  dispatch('auth/setUserDataEntry', {type: 'N', key: 'LAST_COND', value}, { root: true })
   dispatch('sendClaimsRequest', true)
 }
 
 export const setCurrentSort = ({commit, dispatch}, value) => {
-  commit('auth/setUserDataEntry', {key: 'CLAIM_SORT', value}, { root: true })
+  dispatch('auth/setUserDataEntry', {key: 'CLAIM_SORT', type: 'N', value}, { root: true })
   dispatch('sendClaimsRequest', true)
 }
 
 export const sortToggle = ({commit, rootState, dispatch, getters}) => {
-  commit('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', value: getters.isSortOrderDesc ? 0 : 1}, { root: true })
+  dispatch('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', type: 'N', value: getters.isSortOrderDesc ? 0 : 1}, { root: true })
   dispatch('sendClaimsRequest', true)
 }
 

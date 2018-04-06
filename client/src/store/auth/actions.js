@@ -25,6 +25,14 @@ export const loadUserData = async ({state, commit}) => {
   }
 }
 
+export const setUserDataEntry = async ({ commit, state }, {key, type, value}) => {
+  commit('setUserDataEntry', {key, value})
+  try {
+    restClient.post('userdata', { sessionID: state.sessionID, key, type, value }, false)
+  } catch (e) {
+  }
+}
+
 export const logoff = async ({ commit, state }) => {
   try {
     await restClient.post('auth/logoff', { sessionID: state.sessionID })

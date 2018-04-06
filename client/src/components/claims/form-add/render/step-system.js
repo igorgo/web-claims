@@ -2,6 +2,14 @@ import {AfscAutoComplete, AfscSelect} from '../../../index'
 import {QStep} from 'quasar'
 
 export default {
+  computed: {
+    _cTypeRelate () {
+      if (!this.cType) return ''
+      const type = this.typeMap.get(this.cType)
+      const rem = type === 'ЗАУВАЖЕННЯ' ? 'е ' : 'а '
+      return rem + type.toLowerCase()
+    }
+  },
   methods: {
     drawStepSystem (h) {
       return h(QStep, {
@@ -13,45 +21,62 @@ export default {
           ...this.stepIcons
         }
       }, [
-        h(AfscAutoComplete, {
-          props: {
-            label: 'Розділ',
-            mandatory: true,
-            multiple: true,
-            value: this.cUnit,
-            staticData: this.unitOptions
-          },
-          on: {
-            input: val => {
-              this.cUnit = val
-              this.cApp = []
-              this.cFunc = []
-              this.$store.dispatch('staticData/getAppsByUnits', val)
+        h('div', { staticClass: 'q-mb-sm' }, [`Вкажіть, будь ласка, місце в системі, з яким пов'язан${this._cTypeRelate}`]),
+        h('div', {staticClass: 'q-mb-xs'}, [
+          h(AfscAutoComplete, {
+            props: {
+              label: 'Розділ',
+              mandatory: true,
+              multiple: true,
+              value: this.cUnit,
+              staticData: this.unitOptions
+            },
+            on: {
+              input: val => {
+                this.cUnit = val
+                this.cApp = []
+                this.cFunc = []
+                this.$store.dispatch('staticData/getAppsByUnits', val)
+              }
             }
-          }
-        }),
-        h(AfscSelect, {
-          props: {
-            label: 'Застосунок',
-            mandatory: true,
-            disable: !this.cUnit || this.appsByUnit.length === 0,
-            multiple: true,
-            options: this.appsByUnit,
-            value: this.cApp
-          },
-          on: {input: val => { this.cApp = val }}
-        }),
-        h(AfscSelect, {
-          props: {
-            label: 'Дія в розділі',
-            disable: !this.cUnit || this.funcByUnit.length === 0,
-            multiple: true,
-            options: this.funcByUnit,
-            value: this.cFunc
-          },
-          on: {input: val => { this.cFunc = val }}
-        }),
-        this.drawNavigator(h)
+          })
+        ]),
+        h('div', {staticClass: 'q-mb-xs'}, [
+          h(AfscSelect, {
+            props: {
+              label: 'Застосунок',
+              mandatory: true,
+              disable: !this.cUnit || this.appsByUnit.length === 0,
+              multiple: true,
+              options: this.appsByUnit,
+              value: this.cApp
+            },
+            on: {
+              input: val => {
+                this.cApp = val
+              }
+            }
+          })
+        ]),
+        this.cUnit && this.cUnit.split(';').length === 1
+          ? h('div', {staticClass: 'q-mb-xs'}, [
+            h(AfscSelect, {
+              props: {
+                label: 'Дія в розділі',
+                disable: this.funcByUnit.length === 0,
+                multiple: true,
+                options: this.funcByUnit,
+                value: this.cFunc
+              },
+              on: {
+                input: val => {
+                  this.cFunc = val
+                }
+              }
+            })
+          ])
+          : null,
+        this.drawNavigator(h, {valid: this.cUnit && this.cApp.length})
       ])
     }
   }
