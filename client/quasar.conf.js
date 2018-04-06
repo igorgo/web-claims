@@ -82,6 +82,7 @@ module.exports = function (ctx) {
         'QCardMain',
         'QStepper',
         'QStep',
+        'QTooltip',
         'QStepperNavigation'
       ],
       directives: [
