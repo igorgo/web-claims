@@ -1,4 +1,5 @@
 import computed from './computed'
+import methods from './methods'
 import Render from './render'
 
 export default {
@@ -14,8 +15,10 @@ export default {
       cUnit: '',
       cRelFrom: '',
       cBldFrom: '',
+      cContent: '',
       cApp: [],
-      cFunc: []
+      cFunc: [],
+      claimId: null
     }
   },
   render (h) {
@@ -23,6 +26,7 @@ export default {
   },
   mixins: [
     computed,
+    methods,
     ...Render
   ]
 }

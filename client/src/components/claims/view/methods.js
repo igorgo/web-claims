@@ -45,9 +45,20 @@ export default {
       // todo: editComment
       console.log('todo: editComment')
     },
-    doAction (actionCode) {
+    async doAction (actionCode) {
       // todo: doAction
-      console.log(`todo: doAction( ${actionCode} )`)
+      switch (actionCode) {
+        case 'delete':
+          try {
+            await this.$request.post('/claims/delete', {
+              sessionID: this.$store.state.auth.sessionID,
+              id: this.id
+            })
+            this.$router.back()
+          } catch (e) {}
+          break
+        default: console.log(`todo: doAction( ${actionCode} )`)
+      }
     },
     onPanning (obj) {
       if (obj.isFinal) {

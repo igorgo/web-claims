@@ -2,6 +2,7 @@ const rest = require('../rest')
 const db = require('../db')
 const { checkSession } = require('./checkAuth')
 const MSG_READ_FILE_ERROR = 'Помилка отримання приєднаного файлу з бази даних'
+
 async function getFile (req, res, next) {
   try {
     checkSession(req)
@@ -59,4 +60,14 @@ async function getFile (req, res, next) {
   }
 }
 
+async function uploadFile (req, res, next) {
+  try {
+    console.log(req.params)
+    res.send(200, '')
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
 rest.post('/files/get-one', getFile)
+rest.post('/files/upload/:filename', uploadFile)

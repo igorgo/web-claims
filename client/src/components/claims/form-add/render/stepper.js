@@ -14,7 +14,8 @@ export default {
       }, [
         this.drawStepType(h),
         this.drawStepSystem(h),
-        this.drawStepReleaseFrom(h)
+        this.drawStepReleaseFrom(h),
+        this.drawStepContent(h)
       ])
     }
   }

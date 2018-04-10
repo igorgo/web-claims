@@ -19,7 +19,7 @@ rest.errors = errors
 rest.start = async () => {
   if (restStarted) return
   restServer = restify.createServer({ name: 'Afina Server' })
-  restServer.use(restify.plugins.bodyParser({ mapParams: true }))
+  restServer.use(restify.plugins.bodyParser({ mapParams: true, mapFiles: true }))
   restServer.use(restify.plugins.queryParser({ mapParams: true }))
   require('../controllers')
   // require('./restEntriesMock')

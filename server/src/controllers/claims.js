@@ -166,7 +166,70 @@ async function getActions (req, res, next) {
   }
 }
 
+async function addClaim (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, cType, cPriority, cSend, cInit, cApp, cUnit, cFunc, cContent, cRelFrom, cBldFrom, cRelTo } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_INSERT(
+        NCRN                => null,
+        SEVENT_TYPE         => :SEVENT_TYPE,
+        SLINKED_CLAIM       => null,
+        NPRIORITY           => :NPRIORITY,
+        NSEND_TO_DEVELOPERS => :NSEND_TO_DEVELOPERS,
+        SINIT_PERSON        => :SINIT_PERSON,
+        SMODULE             => :SMODULE,
+        SUNITCODE           => :SUNITCODE,
+        SUNITFUNC           => :SUNITFUNC,
+        SEVENT_DESCR        => :SEVENT_DESCR,
+        SREL_FROM           => :SREL_FROM,
+        SBUILD_FROM         => :SBUILD_FROM,
+        SREL_TO             => :SREL_TO,
+        NRN                 => :NRN
+      );
+    end;`
+    const params = db.createParams()
+    params.add('SEVENT_TYPE').dirIn().typeString().val(cType)
+    params.add('NPRIORITY').dirIn().typeNumber().val(cPriority)
+    params.add('NSEND_TO_DEVELOPERS').dirIn().typeNumber().val(cSend)
+    params.add('SINIT_PERSON').dirIn().typeString().val(cInit)
+    params.add('SMODULE').dirIn().typeString().val(cApp)
+    params.add('SUNITCODE').dirIn().typeString().val(cUnit)
+    params.add('SUNITFUNC').dirIn().typeString().val(cFunc)
+    params.add('SEVENT_DESCR').dirIn().typeString().val(cContent)
+    params.add('SREL_FROM').dirIn().typeString().val(cRelFrom)
+    params.add('SBUILD_FROM').dirIn().typeString().val(cBldFrom)
+    params.add('SREL_TO').dirIn().typeString().val(cRelTo)
+    params.add('NRN').dirOut().typeNumber()
+    const result = (await db.execute(sessionID, sql, params))
+    res.send(200, result.outBinds['NRN'])
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function deleteClaim (req, res, next) {
+  try {
+    checkSession(req)
+    const {sessionID, id} = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_DELETE(NRN => :NRN);
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    await db.execute(sessionID, sql, params)
+    res.send(204, null)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
 rest.post('/claims/actions', getActions)
+rest.post('/claims/add', addClaim)
+rest.post('/claims/delete', deleteClaim)
 rest.post('/claims/history', getHistory)
 rest.post('/claims/files', getFiles)
 rest.post('/claims/find', claimsFind)

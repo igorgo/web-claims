@@ -1,16 +1,19 @@
-import {QStep, QOptionGroup} from 'quasar'
-import {AfscHelpPopup} from '../../..'
+import {QStep, QUploader} from 'quasar'
+import {AfscTextArea} from '../../..'
 
 export default {
   computed: {
-    _cTypeReleaseHelp () {
+    _cTypePrompt () {
       if (!this.cType) return ''
       const type = this.typeMap.get(this.cType)
-      return type === 'ЗАУВАЖЕННЯ'
-        ? 'Опишіть, будь ласка, в чому полядоопрацювання.'
-        : type === 'ДОРОБКА'
-          ? 'яку ви використовуєте.'
-          : 'в якій виявлена помилка'
+      return type === 'ДОРОБКА'
+        ? 'Опишіть, будь ласка, для чого потрібно, та в чому полягає суть доопрацювання.'
+        : type === 'ЗАУВАЖЕННЯ'
+          ? 'Опишіть, будь ласка, неточність, яку Ви помітили. Якщо вона проявляється тільки при певних умовах, опишіть ці умови.'
+          : `Опишіть, будь ласка, помилку яку Ви помітили.</br>
+          Опишіть умови, при яких проявляється помилка.</br>
+          Приведіть повний тект помилки, та стек визову, які з'являються в окні з помилкою</br>
+          Якщо помилка призводить до невірного результату, чи невірної поведінки програми, напишіть результат, який, на Вашу думку, буде вірним.`
     }
   },
   methods: {
@@ -19,32 +22,66 @@ export default {
         props: {
           name: '050',
           default: true,
-          title: 'Тип',
+          title: 'Зміст',
           ...this.stepIcons
         }
       }, [
         h('div', { staticClass: 'q-mb-sm' }, [
           h('div', {
-            staticClass: 'inline'
-          }, [
-            `Оберіть будь ласка, тип рекламації.`
-          ])
+            staticClass: 'inline',
+            domProps: {
+              innerHTML: this._cTypePrompt
+            }
+          })
         ]),
-        h(QOptionGroup, {
+        h(AfscTextArea, {
           props: {
-            type: 'radio',
-            keepColor: true,
-            inline: true,
-            value: this.cType,
-            options: this.$routines.CLAIM_TYPE_OPTIONS
+            label: 'Зміст',
+            value: this.cContent,
+            maxLength: 4000,
+            mandatory: true
           },
           on: {
-            change: val => {
-              this.cType = val
+            input: val => {
+              this.cContent = val
             }
           }
         }),
-        this.drawNavigator(h, {first: true, valid: !!this.cType})
+        h('div', { staticClass: 'q-mb-sm' }, [
+          h('div', {
+            staticClass: 'inline',
+            domProps: {
+              innerHTML: 'При необхідності, додате файли до рекламації.<br/>Використовуйте архіви або стислі формати файлів (jpg або png замість bmp; docx замість doc, тощо.)'
+            }
+          })
+        ]),
+        h(QUploader, {
+          props: {
+            // url: 'api/files/upload',
+            'url-factory': file => 'api/files/upload' + file.name,
+            'hide-upload-button': true,
+            'hide-upload-progress': true,
+            multiple: true,
+            'additional-fields': [
+              {
+                name: 'sessionID',
+                value: this.$store.state.auth.sessionID
+              },
+              {
+                name: 'rn',
+                value: this.claimId
+              }
+            ],
+            'auto-expand': true
+          },
+          ref: 'files'
+        }),
+        this.drawNavigator(h, {
+          valid: !!this.cContent,
+          last: true,
+          lastLabel: 'Відправити рекламацію',
+          lastHandler: this.doAddClaim
+        })
       ])
     }
   }

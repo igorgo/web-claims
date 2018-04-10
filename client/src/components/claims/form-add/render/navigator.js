@@ -2,7 +2,7 @@ import {QStepperNavigation, QBtn} from 'quasar'
 
 export default {
   methods: {
-    drawNavigator (h, {valid = false, first = false, last = {label: '', handler: undefined}}) {
+    drawNavigator (h, {valid = false, first = false, last = false, lastLabel = '', lastHandler = undefined}) {
       return h(QStepperNavigation, [
         !first
           ? h(QBtn, {
@@ -17,7 +17,7 @@ export default {
             }
           })
           : null,
-        !last.handler
+        !last
           ? h(QBtn, {
             props: {
               color: 'primary',
@@ -31,15 +31,15 @@ export default {
             }
           })
           : null,
-        last.handler
+        last
           ? h(QBtn, {
             props: {
               color: 'primary',
-              label: last.label || 'Закінчити',
+              label: lastLabel || 'Закінчити',
               disable: !valid
             },
             on: {
-              click: last.handler
+              click: lastHandler
             }
           })
           : null
