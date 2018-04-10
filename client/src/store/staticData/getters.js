@@ -29,3 +29,5 @@ export const buildsForSelect = state => (version, release) => {
     ? mapToOptions(state.releases[version][release])
     : []
 }
+
+export const initiatorSelect = state => state.personList.map((pers, idx) => ({ label: pers.label, value: idx }))

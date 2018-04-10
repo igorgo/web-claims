@@ -37,9 +37,32 @@ export default {
       })
       this.$routines.saveFile(res.data, Buffer.from(res.headers['x-file-name'], 'base64').toString('utf8'), res.headers['content-type'])
     },
-    deleteFile (id) {
-      // todo: deleteFile
-      console.log('todo: deleteFile')
+    async deleteFile (idx) {
+      const file = this.$store.state.claims.claimFiles[idx]
+      try {
+        await this.$q.dialog({
+          title: 'Видалення',
+          message: `Ви дійсно бажаєте видалити файл «${file.path}»?`,
+          cancel: {
+            label: 'Ні',
+            color: 'positive'
+          },
+          ok: {
+            label: 'Так',
+            color: 'negative'
+          },
+          color: 'secondary'
+        })
+        await this.$request.post(
+          '/files/delete',
+          {
+            sessionID: this.$store.state.auth.sessionID,
+            id: file.id
+          }
+        )
+        this.$store.commit('claims/deleteFile', idx)
+      } catch (e) {
+      }
     },
     editComment (id) {
       // todo: editComment

@@ -69,3 +69,9 @@ export const afterGetActionsMask = (state, {id, actionsMask}) => {
     state.actionsMask = actionsMask
   }
 }
+
+export const deleteFile = (state, idx) => {
+  if (idx > 0 && idx < state.claimFiles.length) {
+    state.claimFiles.splice(idx, 1)
+  }
+}

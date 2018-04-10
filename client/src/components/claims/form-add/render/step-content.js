@@ -57,8 +57,9 @@ export default {
         ]),
         h(QUploader, {
           props: {
-            // url: 'api/files/upload',
-            'url-factory': file => 'api/files/upload' + file.name,
+            url: '',
+            'url-factory': async file => 'api/files/upload/' + this.claimId + '/' + this.$routines.b64encode(file.name),
+            // 'url-factory': async file => 'api/files/upload/' + (file.name),
             'hide-upload-button': true,
             'hide-upload-progress': true,
             multiple: true,
@@ -66,15 +67,14 @@ export default {
               {
                 name: 'sessionID',
                 value: this.$store.state.auth.sessionID
-              },
-              {
-                name: 'rn',
-                value: this.claimId
               }
             ],
             'auto-expand': true
           },
-          ref: 'files'
+          ref: 'files',
+          on: {
+            finish: () => { this.$root.$emit('claim:add:files:upladed') }
+          }
         }),
         this.drawNavigator(h, {
           valid: !!this.cContent,

@@ -1,8 +1,12 @@
 import {date} from 'quasar'
-
+import {Base64} from 'js-base64'
 const DAY_NAMES = [
   'неділя', 'понеділок', 'вівторок', 'середа', 'четвер', 'п\'ятниця', 'субота'
 ]
+
+const b64encode = s => Base64.encode(s)
+
+const b64decode = s => Base64.decode(s)
 
 const MONTH_NAMES = [
   'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
@@ -234,6 +238,8 @@ export default {
   formatOnlyTime,
   mapEvents,
   hrFileSize,
+  b64encode,
+  b64decode,
   SORT_OPTIONS,
   HELP_STATUS,
   HELP_NEED_OPTIONS,

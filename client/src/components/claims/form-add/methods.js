@@ -10,8 +10,8 @@ export default {
           cType: this.cType,
           cPriority: this.cPriority,
           cSend: this.cSend ? 1 : 0,
-          cInit: this.cAuthor >= 0 ? this.$store.state.staticDicts.allPersons[this.cAuthor].code : null,
-          cApp: this.cApps.join(';'),
+          cInit: this.cAuthor >= 0 ? this.$store.state.staticData.personList[this.cAuthor].code : null,
+          cApp: this.cApp.join(';'),
           cUnit: this.cUnit,
           cFunc: this.cFunc.join(';'),
           cContent: this.cContent,
@@ -19,10 +19,18 @@ export default {
           cBldFrom: this.cBldFrom,
           cRelTo: this.cRelTo
         })
-        this.claimId = res.data
-        this.$router.replace('/claim/view/' + this.claimId)
-        // this.$refs.files.upload()
+        this.claimId = res.data.id
+        const uploader = this.$refs.files
+        if (uploader.files.length) {
+          this.$root.$once('claim:add:files:upladed', () => {
+            this.$router.replace('/claim/view/' + this.claimId)
+          })
+          this.$refs.files.upload()
+        } else {
+          this.$router.replace('/claim/view/' + this.claimId)
+        }
       } catch (e) {
+        console.error(e)
       }
     }
   }

@@ -2,6 +2,7 @@ const rest = require('../rest')
 const db = require('../db')
 const { checkSession } = require('./checkAuth')
 const MSG_READ_FILE_ERROR = 'Помилка отримання приєднаного файлу з бази даних'
+const uniqid = require('uniqid')
 
 async function getFile (req, res, next) {
   try {
@@ -62,12 +63,54 @@ async function getFile (req, res, next) {
 
 async function uploadFile (req, res, next) {
   try {
+    checkSession(req)
+    const { sessionID, id, filename, file } = req.params
     console.log(req.params)
-    res.send(200, '')
+    console.log('sessionID', sessionID)
+    console.log('id', id)
+    console.log('file', file)
+    console.log('filename', Buffer.from(filename, 'base64').toString())
+    const sql = `
+    begin
+      UDO_PACKAGE_NODEWEB_IFACE.ACT_ADD_DOC(
+        P_RN       => :RN,
+        P_CODE     => :CODE,
+        P_FILENAME => :FILENAME,
+        P_FILE     => :FILE
+      );
+    end;
+  `
+    const params = db.createParams()
+    params.add('RN').dirIn().typeNumber().val(parseInt(id))
+    params.add('CODE').dirIn().typeString().val(uniqid.process())
+    params.add('FILENAME').dirIn().typeString().val(Buffer.from(filename, 'base64').toString())
+    params.add('FILE').dirIn().typeBuffer().val(file)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function deleteFile (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+    begin
+      UDO_PACKAGE_NODEWEB_IFACE.ACT_DOC_DELETE(
+        P_RN       => :RN
+      );
+    end;`
+    const params = db.createParams()
+    params.add('RN').dirIn().typeNumber().val(id)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
   } catch (e) {
     next(new rest.errors.InternalServerError(e.message))
   }
 }
 
 rest.post('/files/get-one', getFile)
-rest.post('/files/upload/:filename', uploadFile)
+rest.post('/files/delete', deleteFile)
+rest.post('/files/upload/:id/:filename', uploadFile)

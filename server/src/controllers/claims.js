@@ -203,7 +203,7 @@ async function addClaim (req, res, next) {
     params.add('SREL_TO').dirIn().typeString().val(cRelTo)
     params.add('NRN').dirOut().typeNumber()
     const result = (await db.execute(sessionID, sql, params))
-    res.send(200, result.outBinds['NRN'])
+    res.send(200, {id: result.outBinds['NRN']})
   } catch (e) {
     next(new rest.errors.InternalServerError(e.message))
   }

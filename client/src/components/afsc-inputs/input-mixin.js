@@ -12,9 +12,9 @@ export default {
   },
   computed: {
     _color () {
-      return (this.mandatory && !this._hasValue)
-        ? 'mand-color'
-        : 'primary-8'
+      return this.valid
+        ? 'primary-8'
+        : 'mand-color'
     },
     _hasValue () {
       let b
@@ -29,8 +29,11 @@ export default {
       }
       return b
     },
+    _mandatored () {
+      return this.mandatory ? this._hasValue() : true
+    },
     valid () {
-      return this.mandatory ? !!this.value : true
+      return this._mandatored
     }
   },
   methods: {

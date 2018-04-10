@@ -4,7 +4,7 @@ export default {
   methods: {
     drawFiles (h) {
       return !this.files.length ? null : h(
-        'div', { staticClass: 'q-mt-sm' }, this.files.map(f => h(
+        'div', { staticClass: 'q-mt-sm' }, this.files.map((f, idx) => h(
           'div', { staticClass: 'items-center q-pt-xs' }, [
             h(QIcon, {
               props: { name: 'bt-attach-file', size: '20px' },
@@ -31,7 +31,7 @@ export default {
                 staticClass: 'cursor-pointer',
                 nativeOn: {
                   click: () => {
-                    this.deleteFile(f.id)
+                    this.deleteFile(idx)
                   }
                 }
               })
