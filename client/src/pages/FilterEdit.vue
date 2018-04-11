@@ -1,5 +1,5 @@
 <template>
-  <q-page class="filter-edit-form">
+  <q-page class="page-form">
     <afsc-form :title="actionTitle" :tabs="tabs" pane-height="200px" :buttons="formButtons" btn-min-width="90px">
       <div slot="header-actions" v-if="isEditMode">
         <span>{{'«' + filter.name + '»'}}</span>
@@ -130,14 +130,14 @@ export default {
           if (document.activeElement.tagName === 'BODY') this.$router.back()
         }
       },
-      tabCount: 5,
-      activeTabName: '',
+      // tabCount: 5,
+      // activeTabName: '',
       tabs: [
-        'Реквізити',
-        'Система',
-        'Реліз',
-        'Персони',
-        'Зміст'
+        {title: 'Реквізити'},
+        {title: 'Система'},
+        {title: 'Реліз'},
+        {title: 'Персони'},
+        {title: 'Зміст'}
       ],
       filter: {
         rn: null,
@@ -165,8 +165,6 @@ export default {
           {
             label: 'Скасування',
             handler: () => {
-              this.$store.commit('filters/blockListUpdate', true)
-              if (this.isCondMode) this.$store.commit('claims/blockListUpdate', true)
               this.$router.back()
             }
           }
@@ -258,6 +256,7 @@ export default {
             rn: this.filter.rn
           }
         )
+        this.$store.commit('filters/blockListUpdate', false)
         this.$router.back()
       } catch (e) {
       }
@@ -273,6 +272,7 @@ export default {
           this.filter.name = name
         }
         void await this.postSave()
+        this.$store.commit('filters/blockListUpdate', false)
         this.$router.back()
       } catch (e) {
       }
@@ -284,6 +284,7 @@ export default {
         this.filter.name = name
         const newRn = await this.postSave()
         this.$store.dispatch('auth/setUserDataEntry', {key: 'LAST_COND', type: 'N', value: newRn})
+        this.$store.commit('claims/blockListUpdate', false)
         this.$router.back()
       } catch (e) {
       }
@@ -292,7 +293,7 @@ export default {
       try {
         await this.postSave()
         this.$store.dispatch('auth/setUserDataEntry', {key: 'LAST_COND', type: 'N', value: null})
-        this.$store.commit('filters/blockListUpdate', true)
+        this.$store.commit('claims/blockListUpdate', false)
         this.$router.back()
       } catch (e) {
       }

@@ -3,22 +3,25 @@ import restClient from '../../plugins/restClient'
 
 export const setCurrentCondition = ({commit, dispatch}, value) => {
   dispatch('auth/setUserDataEntry', {type: 'N', key: 'LAST_COND', value}, { root: true })
+  commit('blockListUpdate', false)
   dispatch('sendClaimsRequest', true)
 }
 
 export const setCurrentSort = ({commit, dispatch}, value) => {
   dispatch('auth/setUserDataEntry', {key: 'CLAIM_SORT', type: 'N', value}, { root: true })
+  commit('blockListUpdate', false)
   dispatch('sendClaimsRequest', true)
 }
 
 export const sortToggle = ({commit, rootState, dispatch, getters}) => {
   dispatch('auth/setUserDataEntry', {key: 'CLAIM_SORT_ORDER', type: 'N', value: getters.isSortOrderDesc ? 0 : 1}, { root: true })
+  commit('blockListUpdate', false)
   dispatch('sendClaimsRequest', true)
 }
 
 export const sendClaimsRequest = async ({state, commit, rootState, getters}, discardPage = false) => {
-  if (state.doNotUpdate) {
-    commit('blockListUpdate', false)
+  if (state.doNotUpdateList) {
+    // commit('blockListUpdate', false)
     return
     // Events.$emit('claims:scroll:to:rec', { pos: state.claimRecordIndexActive })
   }
@@ -44,10 +47,12 @@ export const sendClaimsRequest = async ({state, commit, rootState, getters}, dis
 
 export const setCurrentPage = async ({dispatch, commit}, page) => {
   commit('setCurrentPage', page)
+  commit('blockListUpdate', false)
   await dispatch('sendClaimsRequest')
 }
 
-export const getClaimRecord = async ({commit, getters, dispatch}, id) => {
+export const getClaimRecord = async ({state, commit, getters, dispatch}, id) => {
+  if (state.doNotUpdateRecord) return
   commit('beforeGetRecord')
   const res = await restClient.post('/claims/find-one', {
     sessionID: getters.sessionID,

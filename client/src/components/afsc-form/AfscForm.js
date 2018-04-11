@@ -32,7 +32,7 @@ export default {
     }
   },
   render (h) {
-    return h('div', {staticClass: 'form-container'}, [this._drawHeader(h), this._drawBody(h), this._drawFooter(h)])
+    return h('div', { staticClass: 'form-container' }, [this._drawHeader(h), this._drawBody(h), this._drawFooter(h)])
   },
   methods: {
     _makeTabs (h) {
@@ -45,8 +45,10 @@ export default {
             slot: 'title',
             props: {
               name: 'tab-' + i,
-              label: this.tabs[i],
-              default: i === 0
+              label: this.tabs[i].title,
+              default: i === 0,
+              hidden: this.tabs[i].hide,
+              alert: this.tabs[i].alert
             }
           }
         ))
@@ -98,7 +100,8 @@ export default {
                 size: 'md'
               },
               on: {
-                click: this.buttons[i].handler || (() => {})
+                click: this.buttons[i].handler || (() => {
+                })
               }
             }
           )

@@ -92,6 +92,9 @@ export default {
             this.$router.back()
           } catch (e) {}
           break
+        case 'edit':
+          this.$router.push('/claim/edit/' + this.id)
+          break
         default: console.log(`todo: doAction( ${actionCode} )`)
       }
     },

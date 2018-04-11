@@ -20,6 +20,7 @@ export default {
           cRelTo: this.cRelTo
         })
         this.claimId = res.data.id
+        this.$store.commit('claims/blockListUpdate', false)
         const uploader = this.$refs.files
         if (uploader.files.length) {
           this.$root.$once('claim:add:files:upladed', () => {

@@ -227,6 +227,42 @@ async function deleteClaim (req, res, next) {
   }
 }
 
+async function editClaim (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, cId, cContent, cRelFrom, cBldFrom, cRelTo, cApp, cUnit, cFunc } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_UPDATE(
+        NRN           => :NRN,
+        SLINKED_CLAIM => null,
+        SEVENT_DESCR  => :SEVENT_DESCR,
+        SREL_FROM     => :SREL_FROM,
+        SBUILD_FROM   => :SBUILD_FROM,
+        SREL_TO       => :SREL_TO,
+        SBUILD_TO     => null,
+        SMODULE       => :SMODULE,
+        SUNITCODE     => :SUNITCODE,
+        SUNITFUNC     => :SUNITFUNC
+      );
+    end;`
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(cId)
+    params.add('SEVENT_DESCR').dirIn().typeString().val(cContent)
+    params.add('SREL_FROM').dirIn().typeString().val(cRelFrom)
+    params.add('SBUILD_FROM').dirIn().typeString().val(cBldFrom)
+    params.add('SREL_TO').dirIn().typeString().val(cRelTo)
+    params.add('SMODULE').dirIn().typeString().val(cApp)
+    params.add('SUNITCODE').dirIn().typeString().val(cUnit)
+    params.add('SUNITFUNC').dirIn().typeString().val(cFunc)
+    await db.execute(sessionID, sql, params)
+    res.send(200, {id: cId})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/edit', editClaim)
 rest.post('/claims/actions', getActions)
 rest.post('/claims/add', addClaim)
 rest.post('/claims/delete', deleteClaim)

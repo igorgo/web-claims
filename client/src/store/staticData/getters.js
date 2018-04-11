@@ -31,3 +31,13 @@ export const buildsForSelect = state => (version, release) => {
 }
 
 export const initiatorSelect = state => state.personList.map((pers, idx) => ({ label: pers.label, value: idx }))
+
+export const appsByUnitOptions = (state) => state.unitApps.map(i => ({
+  label: i.appName,
+  value: i.appName
+}))
+
+export const funcByUnitOptions = (state) => state.unitFuncs.map(i => ({
+  label: i.funcName,
+  value: i.funcName
+}))

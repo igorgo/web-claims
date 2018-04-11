@@ -1,9 +1,7 @@
 import restClient from '../../plugins/restClient'
 
 export const getFiltersList = async ({commit, state, rootState}) => {
-  if (state.doNotUpdate) {
-    commit('blockListUpdate', false)
-  } else {
+  if (!state.doNotUpdate) {
     try {
       const res = await restClient.get('filters/my-list', {sessionID: rootState.auth.sessionID})
       commit('setFiltersList', res.data)

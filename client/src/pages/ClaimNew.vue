@@ -29,7 +29,6 @@ export default {
   methods: {
     onCancel () {
       this.$store.commit('filters/blockListUpdate', true)
-      this.$store.commit('claims/blockListUpdate', true)
       this.$router.back()
     }
   }

@@ -1,7 +1,11 @@
 import { SessionStorage } from 'quasar'
 
 export const blockListUpdate = (state, block) => {
-  state.doNotUpdate = block
+  state.doNotUpdateList = block
+}
+
+export const blockRecordUpdate = (state, block) => {
+  state.doNotUpdateRecord = block
 }
 
 export const shiftActiveRecordIndex = (state, offset) => {
@@ -27,6 +31,7 @@ export const claimListGot = (state, data) => {
     Events.$emit(AE_CLAIMS_PAGE_LOADED)
   } */
   state.activeRecordIndex = data.claims.length ? 0 : null
+  state.doNotUpdateList = true
 }
 
 export const claimListReset = (state) => {
@@ -50,6 +55,7 @@ export const beforeGetRecord = (state) => {
 
 export const afterGetRecord = (state, claim) => {
   state.claimRecord = claim
+  state.doNotUpdateRecord = true
 }
 
 export const afterGetFiles = (state, {id, files}) => {

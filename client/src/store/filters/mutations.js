@@ -11,6 +11,7 @@ export const setFiltersList = (state, filters) => {
   } else {
     state.listIndex = -1
   }
+  state.doNotUpdate = true
 }
 
 export const setNewFilterRn = (state, rn) => {

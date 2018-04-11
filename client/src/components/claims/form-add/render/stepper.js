@@ -15,7 +15,7 @@ export default {
         this.drawStepType(h),
         this.drawStepSystem(h),
         this.drawStepReleaseFrom(h),
-        this.drawStepPmo(h),
+        this.$store.state.auth.isPmo ? this.drawStepPmo(h) : null,
         this.drawStepContent(h)
       ])
     }

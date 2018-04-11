@@ -11,16 +11,10 @@ export default {
       return tm
     },
     appsByUnit () {
-      return this.$store.state.staticData.unitApps.map(i => ({
-        label: i.appName,
-        value: i.appName
-      }))
+      return this.$store.getters['staticData/appsByUnitOptions']
     },
     funcByUnit () {
-      return this.$store.state.staticData.unitFuncs.map(i => ({
-        label: i.funcName,
-        value: i.funcName
-      }))
+      return this.$store.getters['staticData/funcByUnitOptions']
     }
   }
 }
