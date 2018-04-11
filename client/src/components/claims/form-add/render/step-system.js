@@ -21,7 +21,7 @@ export default {
           ...this.stepIcons
         }
       }, [
-        h('div', { staticClass: 'q-mb-sm' }, [`Вкажіть, будь ласка, місце в системі, з яким пов'язан${this._cTypeRelate}`]),
+        h('div', { staticClass: 'q-mb-sm ts-8 text-italic' }, [`Вкажіть, будь ласка, місце в системі, з яким пов'язан${this._cTypeRelate}`]),
         h('div', {staticClass: 'q-mb-xs'}, [
           h(AfscAutoComplete, {
             props: {
@@ -58,12 +58,11 @@ export default {
             }
           })
         ]),
-        this.cUnit && this.cUnit.split(';').length === 1
+        this.cUnit && this.cUnit.split(';').length === 1 && this.funcByUnit.length
           ? h('div', {staticClass: 'q-mb-xs'}, [
             h(AfscSelect, {
               props: {
                 label: 'Дія в розділі',
-                disable: this.funcByUnit.length === 0,
                 multiple: true,
                 options: this.funcByUnit,
                 value: this.cFunc
@@ -76,7 +75,7 @@ export default {
             })
           ])
           : null,
-        this.drawNavigator(h, {valid: this.cUnit && this.cApp.length})
+        this.drawNavigator(h, {valid: this.testMode || (this.cUnit && this.cApp.length)})
       ])
     }
   }

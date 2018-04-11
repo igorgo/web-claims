@@ -6,6 +6,7 @@ export default {
     files () { return this.$store.state.claims.claimFiles },
     history () { return this.$store.state.claims.claimHistory },
     actionsMask () { return this.$store.state.claims.actionsMask },
-    availableActions () { return this.$store.getters['claims/availableActions'] }
+    availableActions () { return this.$store.getters['claims/availableActions'] },
+    fullNo () { return this.record.claimPrefix + '-' + this.record.claimNumber }
   }
 }

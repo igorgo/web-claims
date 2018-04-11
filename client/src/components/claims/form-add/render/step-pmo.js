@@ -29,8 +29,8 @@ export default {
           ...this.stepIcons
         }
       }, [
-        h('div', { staticClass: 'row' }, [
-          h('div', {staticClass: 'col-12'}, [
+        h('div', { staticClass: 'row q-mb-xs' }, [
+          h('div', { staticClass: 'col-12 q-px-xs' }, [
             h(AfscSelect, {
               props: {
                 label: 'Ініціатыр',
@@ -43,8 +43,10 @@ export default {
                 }
               }
             })
-          ]),
-          h('div', {staticClass: 'col-12'}, [
+          ])
+        ]),
+        h('div', { staticClass: 'row q-mb-xs items-center' }, [
+          h('div', { staticClass: 'col-12 col-sm-4 q-px-xs q-mb-xs' }, [
             h(AfscSelect, {
               props: {
                 label: 'Реліз виконання',
@@ -58,7 +60,25 @@ export default {
               }
             })
           ]),
-          h('div', {staticClass: 'col-12'}, [
+          h('div', { staticClass: 'col-12 col-sm-4 q-px-xs q-mb-xs' }, [
+            h(AfscNumberInput, {
+              props: {
+                min: 1,
+                max: 10,
+                label: 'Пріоритет',
+                mandatory: true,
+                value: this.cPriority
+              },
+              ref: 'prior',
+              on: {
+                input: val => {
+                  console.log(this.$refs)
+                  this.cPriority = val
+                }
+              }
+            })
+          ]),
+          h('div', { staticClass: 'col-12 col-sm-4 q-px-xs q-mb-xs' }, [
             h(AfscCheckbox, {
               props: {
                 label: 'На розгляд',
@@ -70,24 +90,10 @@ export default {
                 }
               }
             })
-          ]),
-          h(AfscNumberInput, {
-            props: {
-              min: 1,
-              max: 10,
-              label: 'Пріоритет',
-              mandatory: true,
-              value: this.cPriority
-            },
-            ref: 'prior',
-            on: {
-              input: val => {
-                this.cPriority = val
-              }
-            }
-          })
+          ])
         ]),
-        this.drawNavigator(h, {valid: this.$refs.prior.valid})
+        this.drawNavigator(h, { valid: this.testMode || (this.cPriority >= 1 && this.cPriority <= 10) })
+        // this.drawNavigator(h, {valid: true})
       ])
     }
   }

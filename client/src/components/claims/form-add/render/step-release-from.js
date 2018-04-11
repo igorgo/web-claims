@@ -30,11 +30,11 @@ export default {
           ...this.stepIcons
         }
       }, [
-        h('div', { staticClass: 'q-mb-sm' }, [
+        h('div', { staticClass: 'q-mb-sm ts-8 text-italic' }, [
           `Вкажіть, будь ласка, реліз та збірку системи, ${this._cTypeReleaseHelp}`
         ]),
         h('div', { staticClass: 'row' }, [
-          h('div', {staticClass: 'col-12'}, [
+          h('div', {staticClass: 'col-12 col-sm-6 q-px-xs q-mb-xs'}, [
             h(AfscSelect, {
               props: {
                 label: 'Реліз',
@@ -50,7 +50,7 @@ export default {
               }
             })
           ]),
-          h('div', {staticClass: 'col-12'}, [
+          h('div', {staticClass: 'col-12 col-sm-6 q-px-xs q-mb-xs'}, [
             h(AfscSelect, {
               props: {
                 label: 'Збірка',
@@ -67,7 +67,7 @@ export default {
             })
           ])
         ]),
-        this.drawNavigator(h, {valid: this.cBldFrom && this.cRelFrom})
+        this.drawNavigator(h, {valid: this.testMode || (this.cBldFrom && this.cRelFrom)})
       ])
     }
   }

@@ -15,7 +15,7 @@ export default {
       }, [
         h('div', { staticClass: 'q-mb-sm' }, [
           h('div', {
-            staticClass: 'inline'
+            staticClass: 'inline ts-8 text-italic'
           }, [
             `Оберіть будь ласка, тип рекламації.`
           ]),
@@ -54,7 +54,7 @@ export default {
             }
           }
         }),
-        this.drawNavigator(h, {first: true, valid: !!this.cType})
+        this.drawNavigator(h, {first: true, valid: this.testMode || (!!this.cType)})
       ])
     }
   }

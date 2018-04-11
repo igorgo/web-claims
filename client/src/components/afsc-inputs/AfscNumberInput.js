@@ -36,7 +36,7 @@ export default {
         attrs: {
           min: this.min,
           max: this.max,
-          step: this.max
+          step: this.step
         },
         on: Object.assign(this._getHandlers(), {
           input: (val) => {

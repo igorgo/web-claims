@@ -1,9 +1,15 @@
 <template>
-  <q-page padding>
-    <div>
-    <q-btn
-      label=" <- "
-      @click="$router.back()"
+  <q-page class="q-pa-md">
+    <div class="q-mb-md">
+      <div class="inline q-headline text-primary col q-px-xs"><span>Нова рекламація</span></div>
+      <q-btn
+      label="Скасування"
+      icon="bt-round-cancel"
+      outline
+      dense
+      color="primary"
+      class="float-right"
+      @click="onCancel"
     />
     </div>
     <div>
@@ -19,6 +25,13 @@ export default {
   name: 'PageAddClaim',
   components: {
     ClaimFormAdd
+  },
+  methods: {
+    onCancel () {
+      this.$store.commit('filters/blockListUpdate', true)
+      this.$store.commit('claims/blockListUpdate', true)
+      this.$router.back()
+    }
   }
 }
 </script>

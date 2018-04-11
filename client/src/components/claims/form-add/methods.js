@@ -10,7 +10,7 @@ export default {
           cType: this.cType,
           cPriority: this.cPriority,
           cSend: this.cSend ? 1 : 0,
-          cInit: this.cAuthor >= 0 ? this.$store.state.staticData.personList[this.cAuthor].code : null,
+          cInit: this.cAuthor >= 0 ? this.$store.state.staticData.personList[this.cAuthor].value : null,
           cApp: this.cApp.join(';'),
           cUnit: this.cUnit,
           cFunc: this.cFunc.join(';'),

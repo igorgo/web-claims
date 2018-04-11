@@ -30,7 +30,7 @@ export default {
       return b
     },
     _mandatored () {
-      return this.mandatory ? this._hasValue() : true
+      return this.mandatory ? this._hasValue : true
     },
     valid () {
       return this._mandatored

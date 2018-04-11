@@ -6,6 +6,7 @@ export default {
   name: 'claim-form-add',
   data () {
     return {
+      testMode: false,
       stepIcons: {
         doneIcon: 'bt-round-done',
         activeIcon: 'bt-current-location'

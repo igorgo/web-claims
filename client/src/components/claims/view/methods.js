@@ -20,8 +20,6 @@ export default {
       }
     },
     backToList () {
-      this.$store.commit('filters/blockListUpdate', true)
-      this.$store.commit('claims/blockListUpdate', true)
       this.$router.back()
     },
     navResized (size) {
@@ -73,10 +71,24 @@ export default {
       switch (actionCode) {
         case 'delete':
           try {
+            await this.$q.dialog({
+              title: 'Видалення',
+              message: `Ви дійсно бажаєте видалити рекламацію «${this.fullNo}»?`,
+              cancel: {
+                label: 'Ні',
+                color: 'positive'
+              },
+              ok: {
+                label: 'Так',
+                color: 'negative'
+              },
+              color: 'secondary'
+            })
             await this.$request.post('/claims/delete', {
               sessionID: this.$store.state.auth.sessionID,
               id: this.id
             })
+            this.$store.commit('claims/blockListUpdate', false)
             this.$router.back()
           } catch (e) {}
           break
