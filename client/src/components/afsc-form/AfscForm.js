@@ -113,26 +113,37 @@ export default {
       return h('div', { staticClass: 'form-header row items-center' }, [this._drawHeaderTitle(h), this.$slots['header-actions']])
     },
     _drawBody (h) {
-      return h(
-        QTabs,
-        {
-          props: {
-            'no-ripple': true,
-            value: this.activeTabName
+      if (this.tabs && this.tabs.length) {
+        return h(
+          QTabs,
+          {
+            props: {
+              'no-ripple': true,
+              value: this.activeTabName
+            },
+            on: {
+              input: (val) => {
+                this.activeTabName = val
+                this.$emit('tabchange', val)
+              }
+            },
+            ref: 'tabs'
           },
-          on: {
-            input: (val) => {
-              this.activeTabName = val
-              this.$emit('tabchange', val)
+          [
+            ...this._makeTabs(h),
+            ...this._makePanes(h)
+          ]
+        )
+      } else {
+        return h(
+          'div', {
+            staticClass: 'q-tab-pane',
+            style: {
+              'min-height': this.paneHeight
             }
-          },
-          ref: 'tabs'
-        },
-        [
-          ...this._makeTabs(h),
-          ...this._makePanes(h)
-        ]
-      )
+          }, [this.$slots['form-body']]
+        )
+      }
     },
     _drawFooter (h) {
       return h(

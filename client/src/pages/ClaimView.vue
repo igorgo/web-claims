@@ -1,7 +1,6 @@
 <template>
   <q-page>
     <claim-view
-      :id="parseInt($route.params.id)"
     />
   </q-page>
 </template>

@@ -28,7 +28,8 @@
         </div>
         <div v-if="cUnit && cUnit.split(';').length === 1 && funcByUnit.length" class="q-mb-xs">
           <afsc-select
-            label = "Дія в розділі"
+            label="Дія в розділі"
+            multiple
             :options="funcByUnit"
             v-model="cFunc"
           />
@@ -139,7 +140,7 @@ export default {
     onUnitChanged (val) {
       this.cApp = []
       this.cFunc = []
-      this.$store.dispatch('staticData/getAppsByUnits', val)
+      this.$store.dispatch('staticData/getAppsByUnits', {units: val})
     },
     onRelFromChanged () {
       this.cBldFrom = null
@@ -158,15 +159,25 @@ export default {
           cFunc: this.cFunc.join(';')
         })
         this.$store.commit('claims/blockRecordUpdate', false)
+        this.$router.back()
       } catch (e) {
+        console.log(e)
       }
     }
   },
-  mounted () {
+  async mounted () {
     if (this.id !== this.record.id) {
       this.$store.commit('claims/blockRecordUpdate', false)
-      this.requestRecord()
+      await this.$store.dispatch('claims/getClaimRecord', this.id)
     }
+    this.cContent = this.record.content
+    this.cRelFrom = this.record.relFrom
+    this.cBldFrom = this.record.buildFrom
+    this.cRelTo = this.record.relTo
+    this.cUnit = this.record.unit
+    this.$store.dispatch('staticData/getAppsByUnits', {units: this.cUnit, immediate: true})
+    this.cApp = this.record.app ? this.record.app.split(';') : []
+    this.cFunc = this.record.action ? this.record.action.split(';') : []
   }
 }
 </script>

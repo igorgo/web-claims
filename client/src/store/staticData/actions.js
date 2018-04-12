@@ -40,25 +40,30 @@ export const getPersonList = async ({commit, rootState}) => {
   }
 }
 
-export const getAppsByUnits = ({commit, rootState}, units) => {
+export const getAppsByUnits = ({commit, rootState}, {units, immediate = false}) => {
+  const getFunc = async () => {
+    if (!units) return
+    restClient.get('/dicts/apps-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
+      .then(
+        resp => { commit('setUnitApps', resp.data) },
+        e => {}
+      )
+    if (units.split(';').length > 1) return
+    restClient.get('/dicts/func-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
+      .then(
+        resp => { commit('setUnitFunc', resp.data) },
+        e => {}
+      )
+  }
   commit('clearUnitAppAndFunc')
   clearTimeout(this.timerUnitChange)
-  this.timerUnitChange = setTimeout(
-    async () => {
-      if (!units) return
-      restClient.get('/dicts/apps-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
-        .then(
-          resp => { commit('setUnitApps', resp.data) },
-          e => {}
-        )
-      if (units.split(';').length > 1) return
-      restClient.get('/dicts/func-by-unit', {sessionID: rootState.auth.sessionID, unit: units}, false)
-        .then(
-          resp => { commit('setUnitFunc', resp.data) },
-          e => {}
-        )
-    },
-    1000,
-    units
-  )
+  if (immediate) {
+    getFunc()
+  } else {
+    this.timerUnitChange = setTimeout(
+      getFunc,
+      1000,
+      units
+    )
+  }
 }

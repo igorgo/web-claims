@@ -12,6 +12,7 @@ export default [
       { path: '/claims', component: () => import('pages/ClaimList') },
       { path: '/claim/view/:id', component: () => import('pages/ClaimView') },
       { path: '/claim/new', component: () => import('pages/ClaimNew') },
+      { path: '/claim/change-status/:id', component: () => import('pages/ClaimChangeStatus') },
       { path: '/claim/edit/:id', component: () => import('pages/ClaimEdit') }
     ]
   },

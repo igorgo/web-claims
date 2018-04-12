@@ -36,7 +36,7 @@ export default {
                 this.cUnit = val
                 this.cApp = []
                 this.cFunc = []
-                this.$store.dispatch('staticData/getAppsByUnits', val)
+                this.$store.dispatch('staticData/getAppsByUnits', {units: val})
               }
             }
           })

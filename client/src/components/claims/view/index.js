@@ -32,7 +32,7 @@ export default {
     }
   },
   props: {
-    id: Number
+    // id: Number
   },
   mixins: [
     methods,

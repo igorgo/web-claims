@@ -7,6 +7,7 @@ export default {
     history () { return this.$store.state.claims.claimHistory },
     actionsMask () { return this.$store.state.claims.actionsMask },
     availableActions () { return this.$store.getters['claims/availableActions'] },
-    fullNo () { return this.record.claimPrefix + '-' + this.record.claimNumber }
+    fullNo () { return this.record.claimPrefix + '-' + this.record.claimNumber },
+    id () { return parseInt(this.$route.params.id) }
   }
 }

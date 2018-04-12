@@ -262,6 +262,27 @@ async function editClaim (req, res, next) {
   }
 }
 
+async function getNextStatuses (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+    select 
+      S01 as "statCode",
+      N01 as "statId",
+      N02 as "statType"
+    from table(UDO_PACKAGE_NODEWEB_IFACE.GET_NEXTPOINTS(:NRN))
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    const result = await db.execute(sessionID, sql, params)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/next-statuses', getNextStatuses)
 rest.post('/claims/edit', editClaim)
 rest.post('/claims/actions', getActions)
 rest.post('/claims/add', addClaim)

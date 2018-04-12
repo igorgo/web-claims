@@ -52,7 +52,7 @@ export const setCurrentPage = async ({dispatch, commit}, page) => {
 }
 
 export const getClaimRecord = async ({state, commit, getters, dispatch}, id) => {
-  if (state.doNotUpdateRecord) return
+  if (state.doNotUpdateRecord && (id === state.claimRecord.id)) return
   commit('beforeGetRecord')
   const res = await restClient.post('/claims/find-one', {
     sessionID: getters.sessionID,
@@ -96,7 +96,8 @@ export const viewNextClaim = async ({state, commit, dispatch}) => {
     return state.claimList[idx].id
   } else if (state.currentClaimPage !== state.claimListPages) {
     await dispatch('setCurrentPage', state.currentClaimPage + 1)
-    if (state.claimList.length) return state.claimList[idx].id
+    if (state.claimList.length) return state.claimList[0].id
+    else return null
   } else return null
 }
 
