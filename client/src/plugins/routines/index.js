@@ -144,6 +144,9 @@ const NOTES_HEADER_OPTIONS = [
   }
 ]
 
+const DEFAULT_HEADER = 'Примечание'
+const DEFAULT_HEADER_INST = 'Инсталлятор'
+
 function formatDate (str) {
   return date.isValid(str) ? date.formatDate(new Date(str), 'DD.MM.YYYY') : str
 }
@@ -246,5 +249,7 @@ export default {
   HELP_STATUS_OPTIONS,
   CLAIM_TYPE_BY_ID,
   CLAIM_TYPE_OPTIONS,
-  NOTES_HEADER_OPTIONS
+  NOTES_HEADER_OPTIONS,
+  DEFAULT_HEADER,
+  DEFAULT_HEADER_INST
 }

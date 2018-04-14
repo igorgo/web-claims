@@ -282,6 +282,118 @@ async function getNextStatuses (req, res, next) {
   }
 }
 
+async function getPointExecutors (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, pointId } = req.params
+    const sql = `
+    select 
+      S01 as "value",
+      S02 as "label"
+    from table(UDO_PACKAGE_NODEWEB_IFACE.GET_NEXTPOINT_EXECUTORS(:NRN, :NPOINT))
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NPOINT').dirIn().typeNumber().val(pointId)
+    const result = await db.execute(sessionID, sql, params)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimChangeStatus (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, cId, cType, cStatus, cSendTo, cNoteHeader, cNote, cPriority, cRelTo, cBldTo } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_CHANGE_STATE(
+        NRN            => :NRN,
+        SEVENT_TYPE    => :SEVENT_TYPE,
+        SEVENT_STAT    => :SEVENT_STAT,
+        SSEND_CLIENT   => null,
+        SSEND_DIVISION => null,
+        SSEND_POST     => null,
+        SSEND_PERFORM  => null,
+        SSEND_PERSON   => :SSEND_PERSON,
+        SNOTE_HEADER   => :SNOTE_HEADER,
+        SNOTE          => :SNOTE,
+        NPRIORITY      => :NPRIORITY,
+        SREL_TO        => :SREL_TO,
+        SBUILD_TO      => :SBUILD_TO
+      );
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(cId)
+    params.add('SEVENT_TYPE').dirIn().typeString().val(cType)
+    params.add('SEVENT_STAT').dirIn().typeString().val(cStatus)
+    params.add('SSEND_PERSON').dirIn().typeString().val(cSendTo)
+    params.add('SNOTE_HEADER').dirIn().typeString().val(cNoteHeader)
+    params.add('SNOTE').dirIn().typeString().val(cNote)
+    params.add('NPRIORITY').dirIn().typeNumber().val(cPriority)
+    params.add('SREL_TO').dirIn().typeString().val(cRelTo)
+    params.add('SBUILD_TO').dirIn().typeString().val(cBldTo)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function getClaimRetMessage (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+    begin
+      UDO_PACKAGE_NODEWEB_IFACE.FIND_RETPOINT(
+        NRN        => :NRN,
+        NPOINT_OUT => :NPOINT_OUT,
+        SCOMMENTRY => :SCOMMENTRY
+      );
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NPOINT_OUT').dirOut().typeNumber()
+    params.add('SCOMMENTRY').dirOut().typeString(1000)
+    const result = await db.execute(sessionID, sql, params)
+    res.send(200, { message: result.outBinds['SCOMMENTRY'] })
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimReturn (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, cNoteHeader, cNote } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_RETURN(
+        NRN          => :NRN,
+        SNOTE_HEADER => :SNOTE_HEADER,
+        SNOTE        => :SNOTE
+      );
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('SNOTE_HEADER').dirIn().typeString().val(cNoteHeader)
+    params.add('SNOTE').dirIn().typeString().val(cNote)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/return', claimReturn)
+rest.post('/claims/return-message', getClaimRetMessage)
+rest.post('/claims/change-status', claimChangeStatus)
+rest.post('/claims/next-execs', getPointExecutors)
 rest.post('/claims/next-statuses', getNextStatuses)
 rest.post('/claims/edit', editClaim)
 rest.post('/claims/actions', getActions)

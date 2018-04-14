@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { GlobalKeyListener, AfscInput } from '../components'
+import { GlobalKeyListener, AfscInput } from '../../components/index'
 
 export default {
   name: 'LogOn',

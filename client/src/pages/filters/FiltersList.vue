@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { AfscFilterListItem, GlobalKeyListener } from '../components'
+import { AfscFilterListItem, GlobalKeyListener } from '../../components/index'
 
 export default {
   data () {

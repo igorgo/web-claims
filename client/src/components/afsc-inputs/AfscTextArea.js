@@ -16,6 +16,7 @@ export default {
     return h(
       QInput,
       {
+        staticClass: 'app-text-area',
         props: Object.assign(this._getProps(), {
           type: 'textarea',
           'stack-label': this.maxLength ? `${this.label} ${this.value.length}/${this.maxLength}` : this.label

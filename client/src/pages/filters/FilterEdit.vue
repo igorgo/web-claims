@@ -114,8 +114,8 @@
 </template>
 
 <script>
-import GlobalKeyListener from '../components/mixins/GlobalKeyListener'
-import {AfscForm, AfscInput, AfscSelect, AfscAutoComplete, AfscCheckbox} from '../components'
+import GlobalKeyListener from '../../components/mixins/GlobalKeyListener'
+import {AfscForm, AfscInput, AfscSelect, AfscAutoComplete, AfscCheckbox} from '../../components/index'
 
 function isOneValue (val) {
   return val && (val.split(';')).length === 1

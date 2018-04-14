@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {ClaimFormAdd} from '../components'
+import {ClaimFormAdd} from '../../../components/index'
 
 export default {
   name: 'PageAddClaim',

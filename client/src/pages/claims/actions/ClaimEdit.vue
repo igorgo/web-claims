@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import GlobalKeyListener from '../components/mixins/GlobalKeyListener'
-import {ClaimFormEdit} from '../components'
+import GlobalKeyListener from '../../../components/mixins/GlobalKeyListener'
+import {ClaimFormEdit} from '../../../components/index'
 
 export default {
   name: 'ClaimEdit',

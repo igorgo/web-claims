@@ -72,7 +72,6 @@ export default {
               ref: 'prior',
               on: {
                 input: val => {
-                  console.log(this.$refs)
                   this.cPriority = val
                 }
               }

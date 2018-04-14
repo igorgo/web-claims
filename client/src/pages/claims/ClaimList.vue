@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {ClaimsMobile} from '../components'
+import {ClaimsMobile} from '../../components/index'
 
 export default {
   // name: 'PageName',

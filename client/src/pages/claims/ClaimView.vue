@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {ClaimView} from '../components'
+import {ClaimView} from '../../components/index'
 
 export default {
   // name: 'PageName',

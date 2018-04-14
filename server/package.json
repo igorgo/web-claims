@@ -5,7 +5,7 @@
   "main": "web-claim.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node web-claims"
+    "start": "node web-claims.js"
   },
   "author": "Igor Gorodetskyy <igorgo16@gmail.com>",
   "license": "Apache-2.0",

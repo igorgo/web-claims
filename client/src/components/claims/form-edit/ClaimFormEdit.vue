@@ -1,86 +1,87 @@
 <template>
-    <afsc-form
-      title="Виправлення рекламації"
-      :tabs="tabs"
-      pane-height="200px"
-      :buttons="formButtons"
-    >
-      <div slot="tab-0">
-        <div class="q-mb-xs">
-          <afsc-auto-complete
-            label="Розділ"
-            mandatory
-            multiple
-            v-model="cUnit"
-            :static-data="$store.getters['staticData/unitsForSelect']"
-            @input="onUnitChanged"
-          />
-        </div>
-        <div class="q-mb-xs">
-          <afsc-select
-            label = "Застосунок"
-            mandatory
-            :disable="!cUnit || appsByUnit.length === 0"
-            multiple
-            :options="appsByUnit"
-            v-model="cApp"
-          />
-        </div>
-        <div v-if="cUnit && cUnit.split(';').length === 1 && funcByUnit.length" class="q-mb-xs">
-          <afsc-select
-            label="Дія в розділі"
-            multiple
-            :options="funcByUnit"
-            v-model="cFunc"
-          />
-        </div>
+  <afsc-form
+    title="Виправлення рекламації"
+    :tabs="tabs"
+    pane-height="200px"
+    :buttons="formButtons"
+  >
+    <div slot="tab-0">
+      <div class="q-mb-xs">
+        <afsc-auto-complete
+          label="Розділ"
+          mandatory
+          multiple
+          v-model="cUnit"
+          :static-data="$store.getters['staticData/unitsForSelect']"
+          @input="onUnitChanged"
+        />
       </div>
-      <div slot="tab-1">
-        <div class="row">
-          <div class="col-12 col-sm-6 q-px-xs q-mb-xs">
-            <afsc-select
-              label="Реліз"
-              mandatory
-              :options="releasesOptions"
-              v-model="cRelFrom"
-              @input="onRelFromChanged"
-            />
-          </div>
-          <div class="col-12 col-sm-6 q-px-xs q-mb-xs">
-            <afsc-select
-              label="Збірка"
-              mandatory
-              :disable="!cRelFrom"
-              :options="buildsOptions"
-              v-model="cBldFrom"
-            />
-          </div>
-        </div>
+      <div class="q-mb-xs">
+        <afsc-select
+          label="Застосунок"
+          mandatory
+          :disable="!cUnit || appsByUnit.length === 0"
+          multiple
+          :options="appsByUnit"
+          v-model="cApp"
+        />
       </div>
-      <div slot="tab-2">
-        <div class="q-mb-xs">
+      <div v-if="cUnit && cUnit.split(';').length === 1 && funcByUnit.length" class="q-mb-xs">
+        <afsc-select
+          label="Дія в розділі"
+          multiple
+          :options="funcByUnit"
+          v-model="cFunc"
+        />
+      </div>
+    </div>
+    <div slot="tab-1">
+      <div class="row">
+        <div class="col-12 col-sm-6 q-px-xs q-mb-xs">
           <afsc-select
-            label="Реліз виконання"
+            label="Реліз"
+            mandatory
             :options="releasesOptions"
-            v-model="cRelTo"
+            v-model="cRelFrom"
+            @input="onRelFromChanged"
           />
         </div>
-      </div>
-      <div slot="tab-3">
-        <div class="q-mb-xs">
-          <afsc-text-area
-            label="Зміст"
+        <div class="col-12 col-sm-6 q-px-xs q-mb-xs">
+          <afsc-select
+            label="Збірка"
             mandatory
-            v-model="cContent"
-            :max-length="4000"
+            :disable="!cRelFrom"
+            :options="buildsOptions"
+            v-model="cBldFrom"
           />
         </div>
       </div>
-    </afsc-form>
+    </div>
+    <div slot="tab-2">
+      <div class="q-mb-xs">
+        <afsc-select
+          label="Реліз виконання"
+          :options="releasesOptions"
+          v-model="cRelTo"
+        />
+      </div>
+    </div>
+    <div slot="tab-3">
+      <div class="q-mb-xs">
+        <afsc-text-area
+          label="Зміст"
+          mandatory
+          v-model="cContent"
+          :max-length="4000"
+        />
+      </div>
+    </div>
+  </afsc-form>
 </template>
 
 <script>
 import {AfscForm, AfscAutoComplete, AfscSelect, AfscTextArea} from '../..'
+
 export default {
   name: 'claim-form-edit',
   components: {
@@ -100,29 +101,36 @@ export default {
       cRelTo: null,
       cApp: [],
       cUnit: null,
-      cFunc: [],
-      formButtons: [
-        {
-          label: 'OK',
-          handler: this.doEdit
-        },
-        {
-          label: 'Скасування',
-          handler: () => { this.$router.back() }
-        }
-      ]
+      cFunc: []
     }
   },
   computed: {
-    tabs () {
+    formButtons () {
       return [
-        {title: 'Система', alert: !(this.cUnit && this.cApp.length)},
-        {title: 'Реліз', alert: !(this.cRelFrom && this.cBldFrom)},
-        {title: 'Виконання', hide: !this.$store.state.auth.isPmo},
-        {title: 'Зміст', alert: !(this.cContent)}
+        {
+          label: 'OK',
+          handler: this.doEdit,
+          disable: !this.formValid
+        },
+        {
+          label: 'Скасування',
+          handler: () => {
+            this.$router.back()
+          }
+        }
       ]
     },
-    record () { return this.$store.state.claims.claimRecord },
+    tabs () {
+      return [
+        { title: 'Система', alert: !(this.cUnit && this.cApp.length) },
+        { title: 'Реліз', alert: !(this.cRelFrom && this.cBldFrom) },
+        { title: 'Виконання', hide: !this.$store.state.auth.isPmo },
+        { title: 'Зміст', alert: !(this.cContent) }
+      ]
+    },
+    record () {
+      return this.$store.state.claims.claimRecord
+    },
     appsByUnit () {
       return this.$store.getters['staticData/appsByUnitOptions']
     },
@@ -134,13 +142,17 @@ export default {
     },
     buildsOptions () {
       return this.$store.getters['staticData/buildsForSelect']('A.1.3', this.cRelFrom)
+    },
+    formValid () {
+      return !!this.cUnit && !!this.cApp.length && !!this.cRelFrom && !!this.cBldFrom &&
+        !!this.cContent
     }
   },
   methods: {
     onUnitChanged (val) {
       this.cApp = []
       this.cFunc = []
-      this.$store.dispatch('staticData/getAppsByUnits', {units: val})
+      this.$store.dispatch('staticData/getAppsByUnits', { units: val })
     },
     onRelFromChanged () {
       this.cBldFrom = null
@@ -158,6 +170,7 @@ export default {
           cUnit: this.cUnit,
           cFunc: this.cFunc.join(';')
         })
+        this.$store.commit('claims/blockListUpdate', false)
         this.$store.commit('claims/blockRecordUpdate', false)
         this.$router.back()
       } catch (e) {
@@ -175,7 +188,7 @@ export default {
     this.cBldFrom = this.record.buildFrom
     this.cRelTo = this.record.relTo
     this.cUnit = this.record.unit
-    this.$store.dispatch('staticData/getAppsByUnits', {units: this.cUnit, immediate: true})
+    this.$store.dispatch('staticData/getAppsByUnits', { units: this.cUnit, immediate: true })
     this.cApp = this.record.app ? this.record.app.split(';') : []
     this.cFunc = this.record.action ? this.record.action.split(';') : []
   }

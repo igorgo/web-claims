@@ -98,6 +98,30 @@ export default {
         case 'status':
           this.$router.push('/claim/change-status/' + this.id)
           break
+        case 'return':
+          this.$router.push('/claim/return/' + this.id)
+          break
+        case 'assign':
+          // todo: this.$router.push('/claim/assign/' + this.id)
+          break
+        case 'annul':
+          // todo: this.$router.push('/claim/annul/' + this.id)
+          break
+        case 'comment':
+          // todo: this.$router.push('/claim/comment/' + this.id)
+          break
+        case 'attach':
+          // todo: this.$router.push('/claim/attach/' + this.id)
+          break
+        case 'prioritize':
+          // todo: this.$router.push('/claim/prioritize/' + this.id)
+          break
+        case 'setHelpNeed':
+          // todo: this.$router.push('/claim/setHelpNeed/' + this.id)
+          break
+        case 'setHelpStatus':
+          // todo: this.$router.push('/claim/setHelpStatus/' + this.id)
+          break
         default: console.log(`todo: doAction( ${actionCode} )`)
       }
     },
