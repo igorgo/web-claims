@@ -28,7 +28,8 @@ export default {
         'Ctrl+ArrowLeft': this.goToPrevRecord,
         'Ctrl+ArrowRight': this.goToNextRecord,
         'Ctrl+Backspace': this.backToList
-      }
+      },
+      newPriority: 0
     }
   },
   props: {

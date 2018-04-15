@@ -14,7 +14,10 @@ export default [
       { path: '/claim/new', component: () => import('pages/claims/actions/ClaimNew') },
       { path: '/claim/change-status/:id', component: () => import('pages/claims/actions/ClaimChangeStatus') },
       { path: '/claim/edit/:id', component: () => import('pages/claims/actions/ClaimEdit') },
-      { path: '/claim/return/:id', component: () => import('pages/claims/actions/ClaimReturn') }
+      { path: '/claim/return/:id', component: () => import('pages/claims/actions/ClaimReturn') },
+      { path: '/claim/send-to/:id', component: () => import('pages/claims/actions/ClaimSendTo') },
+      { path: '/claim/attach/:id', component: () => import('pages/claims/actions/ClaimAttach') },
+      { path: '/claim/comment/:id', component: () => import('pages/claims/actions/ClaimComment') }
     ]
   },
 

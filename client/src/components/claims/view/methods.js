@@ -67,7 +67,6 @@ export default {
       console.log('todo: editComment')
     },
     async doAction (actionCode) {
-      // todo: doAction
       switch (actionCode) {
         case 'delete':
           try {
@@ -102,19 +101,38 @@ export default {
           this.$router.push('/claim/return/' + this.id)
           break
         case 'assign':
-          // todo: this.$router.push('/claim/assign/' + this.id)
-          break
-        case 'annul':
-          // todo: this.$router.push('/claim/annul/' + this.id)
-          break
-        case 'comment':
-          // todo: this.$router.push('/claim/comment/' + this.id)
+          this.$router.push('/claim/send-to/' + this.id)
           break
         case 'attach':
-          // todo: this.$router.push('/claim/attach/' + this.id)
+          this.$router.push('/claim/attach/' + this.id)
+          break
+        case 'annul':
+          await this.$q.dialog({
+            title: 'Анулювання',
+            message: `Ви дійсно бажаєте анулювати рекламацію «${this.fullNo}»?`,
+            cancel: {
+              label: 'Ні',
+              color: 'positive'
+            },
+            ok: {
+              label: 'Так',
+              color: 'negative'
+            },
+            color: 'secondary'
+          })
+          await this.$request.post('/claims/anull', {
+            sessionID: this.$store.state.auth.sessionID,
+            id: this.id
+          })
+          this.$store.commit('claims/blockRecordUpdate', false)
+          this.$store.commit('claims/blockListUpdate', false)
+          this.requestRecord()
+          break
+        case 'comment':
+          this.$router.push('/claim/comment/' + this.id)
           break
         case 'prioritize':
-          // todo: this.$router.push('/claim/prioritize/' + this.id)
+          this.setNewPriority()
           break
         case 'setHelpNeed':
           // todo: this.$router.push('/claim/setHelpNeed/' + this.id)
@@ -123,6 +141,44 @@ export default {
           // todo: this.$router.push('/claim/setHelpStatus/' + this.id)
           break
         default: console.log(`todo: doAction( ${actionCode} )`)
+      }
+      // todo: doAction
+    },
+    async promptNewPriority () {
+      return this.$q.dialog({
+        title: `Зміна пріоритета`,
+        message: 'Введідь, будь ласка, пріоритет (1-10):',
+        prompt: {
+          model: this.newPriority,
+          type: 'number'
+        },
+        cancel: true
+      })
+    },
+    async setNewPriority () {
+      try {
+        this.newPriority = this.record.priority
+        const priority = await this.promptNewPriority()
+        if (priority > 0 && priority < 11) {
+          if (this.record.priority !== priority) {
+            try {
+              await this.$request.post('/claims/set-priority', {
+                sessionID: this.$store.state.auth.sessionID,
+                id: this.id,
+                priority
+              })
+              this.$store.commit('claims/blockRecordUpdate', false)
+              this.$store.commit('claims/blockListUpdate', false)
+              this.requestRecord()
+            } catch (e) {
+              console.log(e)
+            }
+            console.log(priority)
+          }
+        } else {
+          this.setNewPriority()
+        }
+      } catch (e) {
       }
     },
     onPanning (obj) {

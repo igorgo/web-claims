@@ -390,6 +390,127 @@ async function claimReturn (req, res, next) {
   }
 }
 
+async function getClaimCurrentExecutors (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+    select 
+      S01 as "value",
+      S02 as "label"
+    from table(UDO_PACKAGE_NODEWEB_IFACE.GET_OTHER_EXECUTORS(:NRN))
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    const result = await db.execute(sessionID, sql, params)
+    res.send(200, result.rows)
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimSendTo (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, cType, cStatus, cSendTo, cNoteHeader, cNote } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_DO_SEND(
+        NRN            => :NRN,
+        SEVENT_TYPE    => :SEVENT_TYPE,
+        SEVENT_STAT    => :SEVENT_STAT,
+        SSEND_CLIENT   => null,
+        SSEND_DIVISION => null,
+        SSEND_POST     => null,
+        SSEND_PERFORM  => null,
+        SSEND_PERSON   => :SSEND_PERSON,
+        SNOTE_HEADER   => :SNOTE_HEADER,
+        SNOTE          => :SNOTE
+     );
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('SEVENT_TYPE').dirIn().typeString().val(cType)
+    params.add('SEVENT_STAT').dirIn().typeString().val(cStatus)
+    params.add('SSEND_PERSON').dirIn().typeString().val(cSendTo)
+    params.add('SNOTE_HEADER').dirIn().typeString().val(cNoteHeader)
+    params.add('SNOTE').dirIn().typeString().val(cNote)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimAnull (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id } = req.params
+    const sql = `
+    begin
+      UDO_PKG_CLAIMS.CLAIM_CLOSE(NRN => :NRN);
+    end;`
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimComment (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, cNoteHeader, cNote } = req.params
+    const sql = `
+    begin
+      UDO_PACKAGE_NODEWEB_IFACE.ACT_ADD_NOTE(
+        P_RN => :P_RN,
+        P_NOTE_HEADER => :P_NOTE_HEADER,
+        P_NOTE => :P_NOTE
+      );
+    end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('P_NOTE_HEADER').dirIn().typeString().val(cNoteHeader)
+    params.add('P_NOTE').dirIn().typeString().val(cNote)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimSetPriority (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, priority } = req.params
+    const sql = `
+    begin
+        UDO_PACKAGE_NODEWEB_IFACE.SET_PRIORITY(
+          NRN => :NRN,
+          NPRIORITY => :NPRIORITY
+        );
+      end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NPRIORITY').dirIn().typeNumber().val(priority)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/set-priority', claimSetPriority)
+rest.post('/claims/comment', claimComment)
+rest.post('/claims/anull', claimAnull)
+rest.post('/claims/send-to', claimSendTo)
+rest.post('/claims/curr-execs', getClaimCurrentExecutors)
 rest.post('/claims/return', claimReturn)
 rest.post('/claims/return-message', getClaimRetMessage)
 rest.post('/claims/change-status', claimChangeStatus)

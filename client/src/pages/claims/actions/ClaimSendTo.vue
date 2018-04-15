@@ -1,13 +1,19 @@
 <template>
   <q-page class="page-form">
     <afsc-form
-      title="Повернення"
+      title="Призначення виконавця"
       pane-height="200px"
       :buttons="formButtons"
     >
       <div slot="form-body">
         <div class="row q-mb-xs">
-          <div class="text-italic q-mb-sm" v-html="returnMessage"></div>
+          <afsc-select
+            class="col"
+            label="Виконавець"
+            mandatory
+            v-model="cSend"
+            :options="executors"
+          />
         </div>
         <div class="row q-mb-xs">
           <afsc-select
@@ -36,7 +42,7 @@ import GlobalKeyListener from '../../../components/mixins/GlobalKeyListener'
 import {AfscForm, AfscSelect, AfscTextArea} from '../../../components/index'
 
 export default {
-  name: 'ClaimReturn',
+  name: 'ClaimSendTo',
   data () {
     return {
       keysMap: {
@@ -44,7 +50,8 @@ export default {
           if (document.activeElement.tagName === 'BODY') this.$router.back()
         }
       },
-      returnMessage: '',
+      cSend: null,
+      executors: [],
       cNoteHeader: this.$routines.DEFAULT_HEADER,
       cNote: ''
     }
@@ -60,7 +67,7 @@ export default {
       return [
         {
           label: 'OK',
-          handler: this.doReturn,
+          handler: this.doSendTo,
           disable: !this.formValid
         },
         {
@@ -78,25 +85,28 @@ export default {
       return this.$store.state.claims.claimRecord
     },
     formValid () {
-      return !!this.cNoteHeader && !!this.returnMessage
+      return !!this.cNoteHeader && !!this.cSend
     }
   },
   methods: {
-    async getRetMessage () {
+    async getCurrentExecs () {
       if (this.id > 0) {
-        const resp = await this.$request.post('/claims/return-message', {
+        const resp = await this.$request.post('/claims/curr-execs', {
           sessionID: this.$store.state.auth.sessionID,
           id: this.id
         })
-        this.returnMessage = resp.data.message.replace('\r\n', '<br/>')
+        this.executors = resp.data
       }
     },
-    async doReturn () {
+    async doSendTo () {
       if (!this.formValid) return
       try {
-        await this.$request.post('/claims/return', {
+        await this.$request.post('/claims/send-to', {
           sessionID: this.$store.state.auth.sessionID,
           id: this.id,
+          cType: this.record.claimType,
+          cStatus: this.record.claimState,
+          cSendTo: this.cSend,
           cNoteHeader: this.cNoteHeader,
           cNote: this.cNote
         })
@@ -109,8 +119,7 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.$route.params.id)
-    this.getRetMessage()
+    this.getCurrentExecs()
   }
 }
 </script>
