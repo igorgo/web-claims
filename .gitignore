@@ -7,3 +7,5 @@
 /client/package-lock.json
 /client/node_modules/
 /client/src/css/afs-icons.*
+/client/dist/
+/server/static/
