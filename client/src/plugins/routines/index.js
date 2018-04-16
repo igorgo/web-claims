@@ -104,6 +104,11 @@ const HELP_STATUS_OPTIONS = [
   }
 ]
 
+const FORM_CLAIM_HELP_MODE = {
+  NEED: 'need',
+  STATUS: 'state'
+}
+
 const CLAIM_TYPE_BY_ID = {
   4440: 'ПОМИЛКА',
   4412: 'ДОРОБКА',
@@ -251,5 +256,6 @@ export default {
   CLAIM_TYPE_OPTIONS,
   NOTES_HEADER_OPTIONS,
   DEFAULT_HEADER,
-  DEFAULT_HEADER_INST
+  DEFAULT_HEADER_INST,
+  FORM_CLAIM_HELP_MODE
 }

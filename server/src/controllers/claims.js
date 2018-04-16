@@ -506,6 +506,77 @@ async function claimSetPriority (req, res, next) {
   }
 }
 
+async function claimHelpNeed (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, status, note } = req.params
+    const sql = `
+    begin
+        UDO_PKG_CLAIMS.CLAIM_HELPSIGN_NEED(
+          NRN => :NRN,
+          NSTATUS => :NSTATUS,
+          SNOTE => :SNOTE
+        );
+      end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NSTATUS').dirIn().typeNumber().val(status)
+    params.add('SNOTE').dirIn().typeString().val(note)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function claimHelpStatus (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, status } = req.params
+    const sql = `
+    begin
+        UDO_PKG_CLAIMS.CLAIM_HELPSIGN_STAT(
+          NRN => :NRN,
+          NSTATUS => :NSTATUS
+        );
+      end;
+    `
+    const params = db.createParams()
+    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('NSTATUS').dirIn().typeNumber().val(status)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+async function ClameNoteUpdate (req, res, next) {
+  try {
+    checkSession(req)
+    const { sessionID, id, note} = req.params
+    const sql = `
+    begin
+        UDO_PACKAGE_NODEWEB_IFACE.ACT_EDIT_NOTE(
+          P_RN => :P_RN,
+          P_NOTE => :P_NOTE
+        );
+      end;
+    `
+    const params = db.createParams()
+    params.add('P_RN').dirIn().typeNumber().val(id)
+    params.add('P_NOTE').dirIn().typeString().val(note)
+    await db.execute(sessionID, sql, params)
+    res.send(204, {})
+  } catch (e) {
+    next(new rest.errors.InternalServerError(e.message))
+  }
+}
+
+rest.post('/claims/note-update', ClameNoteUpdate)
+rest.post('/claims/help-status', claimHelpStatus)
+rest.post('/claims/help-need', claimHelpNeed)
 rest.post('/claims/set-priority', claimSetPriority)
 rest.post('/claims/comment', claimComment)
 rest.post('/claims/anull', claimAnull)

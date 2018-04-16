@@ -17,6 +17,10 @@ export const setActiveRecordIndex = (state, index) => {
   state.activeRecordIndex = index
 }
 
+export const updateNote = (state, {idx, text}) => {
+  state.claimHistory[idx].comment = text
+}
+
 export const claimListGot = (state, data) => {
   state.newAddedClaimId = null
   state.claimList = data.claims

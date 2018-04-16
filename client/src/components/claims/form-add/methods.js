@@ -1,9 +1,6 @@
 export default {
   methods: {
     async doAddClaim () {
-      // todo: 'doAddClaim'
-      console.log('doAddClaim')
-      console.log(this.$refs.files)
       try {
         const res = await this.$request.post('/claims/add', {
           sessionID: this.$store.state.auth.sessionID,

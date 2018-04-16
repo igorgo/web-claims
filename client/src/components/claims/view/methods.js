@@ -62,9 +62,26 @@ export default {
       } catch (e) {
       }
     },
-    editComment (id) {
+    editComment (id, text, idx) {
+      this.editedNoteId = id
+      this.editedNoteText = text
+      this.editedNoteHistIdx = idx
       // todo: editComment
       console.log('todo: editComment')
+    },
+    async doEditComment () {
+      try {
+        await this.$request.post('/claims/note-update', {
+          sessionID: this.$store.state.auth.sessionID,
+          id: this.editedNoteId,
+          note: this.editedNoteText
+        })
+        this.$store.commit('claims/updateNote', {idx: this.editedNoteHistIdx, text: this.editedNoteText})
+      } catch (e) {
+      }
+      this.editedNoteId = null
+      this.editedNoteText = null
+      this.editedNoteHistIdx = null
     },
     async doAction (actionCode) {
       switch (actionCode) {
@@ -135,14 +152,14 @@ export default {
           this.setNewPriority()
           break
         case 'setHelpNeed':
-          // todo: this.$router.push('/claim/setHelpNeed/' + this.id)
+          console.log(11)
+          this.$router.push(`/claim/help-state/${this.$routines.FORM_CLAIM_HELP_MODE.NEED}/${this.id}`)
           break
         case 'setHelpStatus':
-          // todo: this.$router.push('/claim/setHelpStatus/' + this.id)
+          this.$router.push(`/claim/help-state/${this.$routines.FORM_CLAIM_HELP_MODE.STATUS}/${this.id}`)
           break
         default: console.log(`todo: doAction( ${actionCode} )`)
       }
-      // todo: doAction
     },
     async promptNewPriority () {
       return this.$q.dialog({

@@ -29,7 +29,10 @@ export default {
         'Ctrl+ArrowRight': this.goToNextRecord,
         'Ctrl+Backspace': this.backToList
       },
-      newPriority: 0
+      newPriority: 0,
+      editedNoteId: null,
+      editedNoteText: '',
+      editedNoteHistIdx: null
     }
   },
   props: {

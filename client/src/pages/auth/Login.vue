@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div style="max-width: 600px" class="relative-position">
+    <div class="auth-content relative-position">
       <div class="q-display-1 q-display-1-opacity">Вхід до системи</div>
       <div class="row q-my-sm">
         <afsc-input
@@ -27,6 +27,9 @@
         style="width: 100%"
         @click="logon"
       />
+      <div class="row q-my-sm">
+        <div @click="toSignUp" class="col text-primary text-center cursor-pointer">Подати заявку на реєстрацію</div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -51,6 +54,9 @@ export default {
     }
   },
   methods: {
+    toSignUp () {
+      this.$router.replace('signup')
+    },
     async logon () {
       try {
         await this.$store.dispatch('auth/logon', { user: this.user, pass: this.pass })

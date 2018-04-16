@@ -9,7 +9,7 @@
 import {ClaimView} from '../../components/index'
 
 export default {
-  // name: 'PageName',
+  name: 'ClaimViewPage',
   components: {
     ClaimView
   },

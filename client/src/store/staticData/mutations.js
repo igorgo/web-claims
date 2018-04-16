@@ -58,6 +58,6 @@ export const resetStaticData = (state) => {
   state.appList = []
   state.unitList = []
   state.releases = {}
-  state.personList = {}
+  state.personList = []
   SessionStorage.remove('staticData')
 }

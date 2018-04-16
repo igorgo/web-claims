@@ -6,6 +6,7 @@ export default [
       { path: '', component: () => import('pages/Main') },
       { path: '/main', component: () => import('pages/Main') },
       { path: '/login', component: () => import('pages/auth/Login') },
+      { path: '/signup', component: () => import('pages/auth/SignUp') },
       { path: '/filters', component: () => import('pages/filters/FiltersList') },
       { path: '/filters/:mode/:id', component: () => import('pages/filters/FilterEdit') },
       { path: '/filters/:mode', component: () => import('pages/filters/FilterEdit') },
@@ -17,7 +18,8 @@ export default [
       { path: '/claim/return/:id', component: () => import('pages/claims/actions/ClaimReturn') },
       { path: '/claim/send-to/:id', component: () => import('pages/claims/actions/ClaimSendTo') },
       { path: '/claim/attach/:id', component: () => import('pages/claims/actions/ClaimAttach') },
-      { path: '/claim/comment/:id', component: () => import('pages/claims/actions/ClaimComment') }
+      { path: '/claim/comment/:id', component: () => import('pages/claims/actions/ClaimComment') },
+      { path: '/claim/help-state/:mode/:id', component: () => import('pages/claims/actions/ClaimHelpState') }
     ]
   },
 
