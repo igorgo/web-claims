@@ -33,7 +33,7 @@ export default {
               ]),
 
               i.comment
-                ? this.editedNoteId === i.noteId
+                ? i.noteId && this.editedNoteId === i.noteId
                   ? h('div', {}, [
                     h(AfscTextArea, {
                       props: {
