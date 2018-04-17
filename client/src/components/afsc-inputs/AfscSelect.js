@@ -13,6 +13,7 @@ export default {
     return h(
       QSelect,
       {
+        ref: 'qselect',
         props: Object.assign(this._getProps(), {
           value: this._value,
           multiple: this.multiple,
@@ -28,6 +29,11 @@ export default {
         })
       }
     )
+  },
+  methods: {
+    hide () {
+      this.$refs.qselect.hide()
+    }
   },
   computed: {
     _value () {

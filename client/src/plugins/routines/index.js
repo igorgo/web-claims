@@ -16,27 +16,38 @@ const MONTH_NAMES = [
 const SORT_OPTIONS = [
   {
     label: 'без сортування',
-    field: ''
+    field: '',
+    value: 0
   },
   {
     label: 'Дата реєстрації',
-    field: 'REG_DATE'
+    field: 'REG_DATE',
+    value: 1
   },
   {
     label: 'Дата зміни',
-    field: 'CHANGE_DATE'
+    field: 'CHANGE_DATE',
+    value: 2
   },
   {
     label: 'Виконавець',
-    field: 'EXECUTOR'
+    field: 'EXECUTOR',
+    value: 3
   },
   {
     label: 'Автор',
-    field: 'INITIATOR'
+    field: 'INITIATOR',
+    value: 4
   },
   {
     label: 'Пріоритет',
-    field: 'PRIORITY'
+    field: 'PRIORITY',
+    value: 5
+  },
+  {
+    label: '- персональне -',
+    field: '',
+    value: 100
   }
 ]
 

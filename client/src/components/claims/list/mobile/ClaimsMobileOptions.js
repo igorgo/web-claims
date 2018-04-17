@@ -4,8 +4,8 @@ import {QBtn} from 'quasar'
 export default {
   data () {
     return {
-      sortList: this.$routines.SORT_OPTIONS.map((item, ind) => {
-        return { label: item.label, value: ind }
+      sortList: this.$routines.SORT_OPTIONS.map((item) => {
+        return { label: item.label, value: item.value }
       })
     }
   },
@@ -52,7 +52,11 @@ export default {
                 outline: true
               },
               staticClass: 'on-right',
-              on: { click: () => { this.$router.push('/filters/cond') } }
+              on: {
+                click: () => {
+                  this.$router.push('/filters/cond')
+                }
+              }
             }
           )
         ])
@@ -64,11 +68,25 @@ export default {
           h(
             AfscSelect,
             {
+              ref: 'sortSelect',
               props: {
                 label: 'Сортування',
                 nonClearable: true,
                 options: this.sortList,
-                value: this.currentClaimSort
+                value: this.currentClaimSort,
+                before: [{
+                  icon: 'sort',
+                  handler: () => {
+                    this.$refs.sortSelect.$el.blur()
+                    setTimeout(
+                      () => {
+                        // console.log(1)
+                        this.$router.push('/claim/user-sort')
+                        // this.$router.back()
+                      }, 50
+                    )
+                  }
+                }]
               },
               staticClass: 'claim-option-select',
               on: {
@@ -87,10 +105,15 @@ export default {
                 round: true,
                 color: 'primary',
                 icon: this.sortIcon,
-                outline: true
+                outline: true,
+                disable: this.currentClaimSort === 0 || this.currentClaimSort === 100
               },
               staticClass: 'on-right',
-              on: { click: () => { this.$store.dispatch('claims/sortToggle') } }
+              on: {
+                click: () => {
+                  this.$store.dispatch('claims/sortToggle')
+                }
+              }
             }
           )
         ])

@@ -18,6 +18,8 @@ export const currentCondition = (state, getters, rootState) => rootState.auth.us
 
 export const currentClaimSort = (state, getters, rootState) => rootState.auth.userData['CLAIM_SORT']
 
+export const userClaimSort = (state, getters, rootState) => rootState.auth.userData['USER_SORT']
+
 export const currentClaimLimit = (state, getters, rootState) => rootState.auth.userData['LIST_LIMIT']
 
 export const isSortOrderDesc = (state, getters, rootState) => !!rootState.auth.userData['CLAIM_SORT_ORDER']

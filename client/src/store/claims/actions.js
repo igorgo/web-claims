@@ -28,7 +28,9 @@ export const sendClaimsRequest = async ({state, commit, rootState, getters}, dis
   commit('claimListReset')
   let sortStr = ''
   const currentClaimSort = getters.currentClaimSort
-  if (currentClaimSort > 0) {
+  if (currentClaimSort === 100) {
+    sortStr = getters.userClaimSort
+  } else if (currentClaimSort > 0) {
     sortStr = Routines.SORT_OPTIONS[currentClaimSort].field
     if (getters.isSortOrderDesc) sortStr += ' DESC'
   }

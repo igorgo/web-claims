@@ -8,7 +8,8 @@ export default {
     autofocus: Boolean,
     after: Array,
     error: Boolean,
-    warning: Boolean
+    warning: Boolean,
+    before: Array
   },
   computed: {
     _color () {
@@ -48,7 +49,8 @@ export default {
         after: this.after,
         clearable: !this.nonClearable,
         error: this.error,
-        warning: this.warning
+        warning: this.warning,
+        before: this.before
       }
     },
     _getHandlers () {

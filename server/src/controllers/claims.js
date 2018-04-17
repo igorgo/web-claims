@@ -474,7 +474,7 @@ async function claimComment (req, res, next) {
     end;
     `
     const params = db.createParams()
-    params.add('NRN').dirIn().typeNumber().val(id)
+    params.add('P_RN').dirIn().typeNumber().val(id)
     params.add('P_NOTE_HEADER').dirIn().typeString().val(cNoteHeader)
     params.add('P_NOTE').dirIn().typeString().val(cNote)
     await db.execute(sessionID, sql, params)
