@@ -85,3 +85,17 @@ export const deleteFile = (state, idx) => {
     state.claimFiles.splice(idx, 1)
   }
 }
+
+export const resetState = (state) => {
+  state.claimList = []
+  state.doNotUpdateList = false
+  state.doNotUpdateRecord = false
+  state.currentClaimPage = 1
+  state.newAddedClaimId = null
+  state.claimListPages = 1
+  state.activeRecordIndex = null
+  state.claimRecord = { id: null }
+  state.claimFiles = []
+  state.claimHistory = []
+  state.actionsMask = 0
+}

@@ -118,7 +118,7 @@ import GlobalKeyListener from '../../components/mixins/GlobalKeyListener'
 import {AfscForm, AfscInput, AfscSelect, AfscAutoComplete, AfscCheckbox} from '../../components/index'
 
 function isOneValue (val) {
-  return val && (val.split(';')).length === 1
+  return Array.isArray(val) ? val.length === 1 : val && (val.split(';')).length === 1
 }
 
 export default {
@@ -284,6 +284,7 @@ export default {
         this.filter.name = name
         const newRn = await this.postSave()
         this.$store.dispatch('auth/setUserDataEntry', {key: 'LAST_COND', type: 'N', value: newRn})
+        this.$store.commit('filters/blockListUpdate', false)
         this.$store.commit('claims/blockListUpdate', false)
         this.$router.back()
       } catch (e) {

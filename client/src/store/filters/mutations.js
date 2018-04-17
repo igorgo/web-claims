@@ -30,3 +30,11 @@ export const filtersListScroll = (state, shift) => {
 export const blockListUpdate = (state, block) => {
   state.doNotUpdate = block
 }
+
+export const resetState = (state) => {
+  state.filters = []
+  state.newFilterRn = null
+  state.invokedByClaims = false
+  state.listIndex = -1
+  state.doNotUpdate = false
+}

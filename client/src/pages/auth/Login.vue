@@ -61,7 +61,7 @@ export default {
       try {
         await this.$store.dispatch('auth/logon', { user: this.user, pass: this.pass })
         await this.$store.dispatch('auth/loadUserData')
-        this.$router.back()
+        this.$router.replace('/claims')
       } catch (e) {
       }
     }

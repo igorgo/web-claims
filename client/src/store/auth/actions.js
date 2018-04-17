@@ -40,5 +40,7 @@ export const logoff = async ({ commit, state }) => {
   } finally {
     commit('logOff')
     commit('staticData/resetStaticData', null, { root: true })
+    commit('filters/resetState', null, { root: true })
+    commit('claims/resetState', null, { root: true })
   }
 }

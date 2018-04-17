@@ -28,7 +28,14 @@ export const logOff = (state) => {
   state.sessionID = ''
   state.userFullName = ''
   state.isPmo = false
-  saveAuthData(state)
+  state.userData = {
+    'LAST_COND': null,
+    'LIST_LIMIT': 25,
+    'CLAIM_SORT': 2,
+    'CLAIM_SORT_ORDER': 1
+  }
+  SessionStorage.clear()
+  // saveAuthData(state)
 }
 
 export const clearError = (state) => {
@@ -36,7 +43,12 @@ export const clearError = (state) => {
 }
 
 export const userDataLoaded = (state, userData) => {
-  let obj = {}
+  let obj = {
+    'LAST_COND': null,
+    'LIST_LIMIT': 25,
+    'CLAIM_SORT': 2,
+    'CLAIM_SORT_ORDER': 1
+  }
   for (let i = 0; i < userData.length; i++) {
     const row = userData[i]
     obj[row.name] = row.str || row.num || row.dat

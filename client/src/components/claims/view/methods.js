@@ -66,8 +66,6 @@ export default {
       this.editedNoteId = id
       this.editedNoteText = text
       this.editedNoteHistIdx = idx
-      // todo: editComment
-      console.log('todo: editComment')
     },
     async doEditComment () {
       try {
@@ -152,7 +150,6 @@ export default {
           this.setNewPriority()
           break
         case 'setHelpNeed':
-          console.log(11)
           this.$router.push(`/claim/help-state/${this.$routines.FORM_CLAIM_HELP_MODE.NEED}/${this.id}`)
           break
         case 'setHelpStatus':
@@ -190,7 +187,6 @@ export default {
             } catch (e) {
               console.log(e)
             }
-            console.log(priority)
           }
         } else {
           this.setNewPriority()

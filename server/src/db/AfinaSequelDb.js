@@ -184,7 +184,9 @@ class AfinaSequelDb {
       this.pubSessionID = cLogInfo.sessionID
       this.pubSessionActive = true
       this.pubSessionTimer = setInterval(
-        this.pubKeepAlive,
+        () => {
+          this.pubKeepAlive()
+        },
         duration('30m')
       )
       console.log('Public session started')
@@ -202,6 +204,7 @@ class AfinaSequelDb {
   }
 
   async getConnectionPub () {
+    console.log(Date.now(), 'keep-alive')
     return this.getConnection(this.pubSessionID)
   }
 
