@@ -32,7 +32,8 @@ export const logOff = (state) => {
     'LAST_COND': null,
     'LIST_LIMIT': 25,
     'CLAIM_SORT': 2,
-    'CLAIM_SORT_ORDER': 1
+    'CLAIM_SORT_ORDER': 1,
+    'USER_SORT': ''
   }
   SessionStorage.clear()
   // saveAuthData(state)
@@ -47,7 +48,8 @@ export const userDataLoaded = (state, userData) => {
     'LAST_COND': null,
     'LIST_LIMIT': 25,
     'CLAIM_SORT': 2,
-    'CLAIM_SORT_ORDER': 1
+    'CLAIM_SORT_ORDER': 1,
+    'USER_SORT': ''
   }
   for (let i = 0; i < userData.length; i++) {
     const row = userData[i]

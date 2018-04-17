@@ -9,7 +9,8 @@ const savedAuthData = SessionStorage.has('authData') ? SessionStorage.get.item('
     'LAST_COND': null,
     'LIST_LIMIT': 25,
     'CLAIM_SORT': 2,
-    'CLAIM_SORT_ORDER': 1
+    'CLAIM_SORT_ORDER': 1,
+    'USER_SORT': ''
   },
   isPmo: false
 }

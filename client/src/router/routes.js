@@ -8,6 +8,7 @@ export default [
       { path: '/login', component: () => import('pages/auth/Login') },
       { path: '/signup', component: () => import('pages/auth/SignUp') },
       { path: '/filters', component: () => import('pages/filters/FiltersList') },
+      { path: '/claim/user-sort', component: () => import('pages/filters/EditUserSort') },
       { path: '/filters/:mode/:id', component: () => import('pages/filters/FilterEdit') },
       { path: '/filters/:mode', component: () => import('pages/filters/FilterEdit') },
       { path: '/claims', component: () => import('pages/claims/ClaimList') },
