@@ -1,4 +1,4 @@
-import {QList, QItem, QCard, QCardMain, QIcon, scroll} from 'quasar'
+import {QList, QItem, QCard, QCardMain, QIcon, scroll, Platform} from 'quasar'
 
 export default {
   computed: {
@@ -64,6 +64,11 @@ export default {
                     h('span', {staticClass: 'text-weight-bold q-pr-sm'}, [claim.numb]),
                     h('span', {}, [claim.unit ? claim.unit.replace(/;/g, ', ') : 'Рекламація'])
                   ]),
+                  Platform.is.desktop
+                    ? h('div', {staticClass: 'q-ma-sm'}, [
+                      h('p', {staticClass: 'first-three-line'}, [claim.description])
+                    ])
+                    : null,
                   h('div', {
                     staticClass: 'col-sm-1 col-3'
                   }, [

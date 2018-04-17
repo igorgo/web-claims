@@ -96,3 +96,11 @@ for i in (0..4)
     color $tStatusFg[(i)]
     // color contrast($tStatusBg[(i)], $black).ratio
     //.ratio > contrast($tStatusBg[(i)], #FFF).ratio ? #000 : #FFF
+
+.first-three-line
+  line-height 1em
+  max-height 3em
+  overflow-y hidden
+  margin-bottom 0
+  color $tertiary
+  font-style oblique
