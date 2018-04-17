@@ -11,7 +11,8 @@ const emptyFilter = {
   claimStatus: '',
   claimExecutor: '',
   claimAuthor: '',
-  claimType: ''
+  claimType: '',
+  helpSign: ''
 }
 
 export default {

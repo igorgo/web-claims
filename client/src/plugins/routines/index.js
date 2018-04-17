@@ -81,6 +81,53 @@ const HELP_NEED_OPTIONS = [
   }
 ]
 
+const HELP_FILTER_OPTIONS = [
+  {
+    label: 'Необхідність - Не вирішено',
+    value: '0'
+  },
+  {
+    label: 'Необхідність - Немає необхідності',
+    value: '1'
+  },
+  {
+    label: 'Необхідність - Необхідно',
+    value: '2'
+  },
+  {
+    label: 'Необхідність - Включити в альбом',
+    value: '3'
+  },
+  {
+    label: 'Необхідність - Описано в іншій рекламації',
+    value: '4'
+  },
+  {
+    label: 'Необхідність - Поки пропущу',
+    value: '5'
+  },
+  {
+    label: 'Стан - Включено',
+    value: '21'
+  },
+  {
+    label: 'Стан - Не включено',
+    value: '22'
+  },
+  {
+    label: 'Стан - Відкладено',
+    value: '23'
+  },
+  {
+    label: 'Стан - Не треба',
+    value: '24'
+  },
+  {
+    label: 'Стан - Включено в альбом',
+    value: '25'
+  }
+]
+
 const HELP_STATUS_OPTIONS = [
   {
     label: 'Включено',
@@ -252,6 +299,7 @@ export default {
   HELP_STATUS,
   HELP_NEED_OPTIONS,
   HELP_STATUS_OPTIONS,
+  HELP_FILTER_OPTIONS,
   CLAIM_TYPE_BY_ID,
   CLAIM_TYPE_OPTIONS,
   NOTES_HEADER_OPTIONS,

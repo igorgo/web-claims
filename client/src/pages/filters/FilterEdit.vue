@@ -108,6 +108,15 @@
         <div class="row q-py-xs">
           <afsc-input class="col" label="Зміст" v-model="filter.claimContent"/>
         </div>
+        <div class="row q-py-xs">
+          <afsc-select
+            label="Необхідність/Стан хелпу"
+            v-model="filter.helpSign"
+            :options="$routines.HELP_FILTER_OPTIONS"
+            multiple
+            class="col"
+          />
+        </div>
       </div>
     </afsc-form>
   </q-page>

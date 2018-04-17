@@ -21,21 +21,22 @@ async function getClaimConditionOne (req, res, next) {
     const sql = `
       begin
         UDO_PACKAGE_NODEWEB_IFACE.GET_CONDITION(
-          P_RN            => :P_RN,
-          P_FILTER_NAME   => :P_FILTER_NAME,
-          P_CLAIM_NUMB    => :P_CLAIM_NUMB,
-          P_CLAIM_TYPE    => :P_CLAIM_TYPE,
-          P_CLAIM_STATUS  => :P_CLAIM_STATUS,
-          P_CLAIM_VERS    => :P_CLAIM_VERS,
-          P_CLAIM_RELEASE => :P_CLAIM_RELEASE,
-          P_CLAIM_BUILD   => :P_CLAIM_BUILD,
-          P_CLAIM_UNIT    => :P_CLAIM_UNIT,
-          P_CLAIM_APP     => :P_CLAIM_APP,
-          P_CLAIM_AUTHOR  => :P_CLAIM_AUTHOR,
-          P_CLAIM_IM_INIT => :P_CLAIM_IM_INIT,
-          P_CLAIM_EXEC    => :P_CLAIM_EXEC,
-          P_CLAIM_IM_PERF => :P_CLAIM_IM_PERF,
-          P_CLAIM_CONTENT => :P_CLAIM_CONTENT
+          P_RN             => :P_RN,
+          P_FILTER_NAME    => :P_FILTER_NAME,
+          P_CLAIM_NUMB     => :P_CLAIM_NUMB,
+          P_CLAIM_TYPE     => :P_CLAIM_TYPE,
+          P_CLAIM_STATUS   => :P_CLAIM_STATUS,
+          P_CLAIM_VERS     => :P_CLAIM_VERS,
+          P_CLAIM_RELEASE  => :P_CLAIM_RELEASE,
+          P_CLAIM_BUILD    => :P_CLAIM_BUILD,
+          P_CLAIM_UNIT     => :P_CLAIM_UNIT,
+          P_CLAIM_APP      => :P_CLAIM_APP,
+          P_CLAIM_AUTHOR   => :P_CLAIM_AUTHOR,
+          P_CLAIM_IM_INIT  => :P_CLAIM_IM_INIT,
+          P_CLAIM_EXEC     => :P_CLAIM_EXEC,
+          P_CLAIM_IM_PERF  => :P_CLAIM_IM_PERF,
+          P_CLAIM_CONTENT  => :P_CLAIM_CONTENT,
+          P_CLAIM_HELPSIGN => :P_CLAIM_HELPSIGN
         );
       end;
    `
@@ -55,6 +56,7 @@ async function getClaimConditionOne (req, res, next) {
     params.add('P_CLAIM_EXEC').dirOut().typeString(1000)
     params.add('P_CLAIM_IM_PERF').dirOut().typeNumber()
     params.add('P_CLAIM_CONTENT').dirOut().typeString(1000)
+    params.add('P_CLAIM_HELPSIGN').dirOut().typeString(1000)
     const result = (await db.execute(sessionID, sql, params)).outBinds
     res.send(200, {
       rn: nrn,
@@ -65,13 +67,14 @@ async function getClaimConditionOne (req, res, next) {
       claimBuild: result['P_CLAIM_BUILD'],
       claimUnit: result['P_CLAIM_UNIT'],
       claimApp: result['P_CLAIM_APP'],
-      imInitiator: result['P_CLAIM_IM_INIT'],
-      imExecutor: result['P_CLAIM_IM_PERF'],
+      imInitiator: result['P_CLAIM_IM_INIT'] ? 1 : 0,
+      imExecutor: result['P_CLAIM_IM_PERF'] ? 1 : 0,
       claimContent: result['P_CLAIM_CONTENT'],
       claimStatus: result['P_CLAIM_STATUS'],
       claimExecutor: result['P_CLAIM_EXEC'],
       claimAuthor: result['P_CLAIM_AUTHOR'],
-      claimType: result['P_CLAIM_TYPE']
+      claimType: result['P_CLAIM_TYPE'],
+      helpSign: result['P_CLAIM_HELPSIGN']
     })
   } catch (e) {
     next(new rest.errors.InternalServerError(e.message))
@@ -103,22 +106,23 @@ async function saveClaimCondition (req, res, next) {
     const { sessionID, filter } = req.params
     const sql = `begin
     UDO_PACKAGE_NODEWEB_IFACE.STORE_FILTER(
-      P_FILTER_RN     => :P_FILTER_RN,
-      P_FILTER_NAME   => :P_FILTER_NAME,
-      P_CLAIM_NUMB    => :P_CLAIM_NUMB,
-      P_CLAIM_TYPE    => :P_CLAIM_TYPE,
-      P_CLAIM_STATUS  => :P_CLAIM_STATUS,
-      P_CLAIM_VERS    => :P_CLAIM_VERS,
-      P_CLAIM_RELEASE => :P_CLAIM_RELEASE,
-      P_CLAIM_BUILD   => :P_CLAIM_BUILD,
-      P_CLAIM_UNIT    => :P_CLAIM_UNIT,
-      P_CLAIM_APP     => :P_CLAIM_APP,
-      P_CLAIM_AUTHOR  => :P_CLAIM_AUTHOR,
-      P_CLAIM_IM_INIT => :P_CLAIM_IM_INIT,
-      P_CLAIM_EXEC    => :P_CLAIM_EXEC,
-      P_CLAIM_IM_PERF => :P_CLAIM_IM_PERF,
-      P_CLAIM_CONTENT => :P_CLAIM_CONTENT,
-      P_OUT_RN        => :P_OUT_RN
+      P_FILTER_RN      => :P_FILTER_RN,
+      P_FILTER_NAME    => :P_FILTER_NAME,
+      P_CLAIM_NUMB     => :P_CLAIM_NUMB,
+      P_CLAIM_TYPE     => :P_CLAIM_TYPE,
+      P_CLAIM_STATUS   => :P_CLAIM_STATUS,
+      P_CLAIM_VERS     => :P_CLAIM_VERS,
+      P_CLAIM_RELEASE  => :P_CLAIM_RELEASE,
+      P_CLAIM_BUILD    => :P_CLAIM_BUILD,
+      P_CLAIM_UNIT     => :P_CLAIM_UNIT,
+      P_CLAIM_APP      => :P_CLAIM_APP,
+      P_CLAIM_AUTHOR   => :P_CLAIM_AUTHOR,
+      P_CLAIM_IM_INIT  => :P_CLAIM_IM_INIT,
+      P_CLAIM_EXEC     => :P_CLAIM_EXEC,
+      P_CLAIM_IM_PERF  => :P_CLAIM_IM_PERF,
+      P_CLAIM_CONTENT  => :P_CLAIM_CONTENT,
+      P_CLAIM_HELPSIGN => :P_CLAIM_HELPSIGN,
+      P_OUT_RN         => :P_OUT_RN
     );
   end;`
     const params = db.createParams()
@@ -137,6 +141,7 @@ async function saveClaimCondition (req, res, next) {
     params.add('P_CLAIM_EXEC').dirIn().typeString().val(filter.claimExecutor)
     params.add('P_CLAIM_IM_PERF').dirIn().typeNumber().val(filter.imExecutor)
     params.add('P_CLAIM_CONTENT').dirIn().typeString().val(filter.claimContent)
+    params.add('P_CLAIM_HELPSIGN').dirIn().typeString().val(Array.isArray(filter.helpSign) ? filter.helpSign.join(';') : filter.helpSign)
     params.add('P_OUT_RN').dirOut().typeNumber()
     const result = (await db.execute(sessionID, sql, params)).outBinds
     res.send(200, { rn: result['P_OUT_RN'] })
