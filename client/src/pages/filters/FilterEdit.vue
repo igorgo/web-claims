@@ -391,7 +391,7 @@ export default {
     async promptFilterName () {
       return this.$q.dialog({
         title: `Назва фільтру`,
-        message: 'Введідь, будь ласка, назву фільтра:',
+        message: 'Введіть, будь ласка, назву фільтра:',
         prompt: {
           model: this.filter.name,
           type: 'text'

@@ -8,12 +8,12 @@ export default {
               staticClass: 'claim-fields-td claim-fields-dt-lbl'
             }, [f.label]),
             h('td', {
-              staticClass: 'claim-fields-td claim-fields-dt-val'
+              staticClass: `claim-fields-td claim-fields-dt-val${f.classes ? ' ' + f.classes : ''}`
             }, [f.value])
           ]
         )
       )
-      return h('div', {staticClass: 'q-pa-xs col-xl-4 col-sm-6 col-12'}, [
+      return h('div', { staticClass: 'q-pa-xs col-xl-4 col-sm-6 col-12' }, [
         h('table', {
           staticClass: 'claim-fields-table',
           attrs: {
@@ -24,11 +24,11 @@ export default {
     },
     drawFieldsInfo (h) {
       if (!this.record.id) return
-      return h('div', {staticClass: 'q-py-sm row justify-around', ref: 'FieldsInfo'}, [
+      return h('div', { staticClass: 'q-py-sm row justify-around', ref: 'FieldsInfo' }, [
         this._drawFieldsList(h, [
           { label: 'Тип рекламації', value: this.record.claimType },
-          { label: 'Рекламація №', value: this.record.claimPrefix + '-' + this.record.claimNumber },
-          { label: 'Пріоритет', value: this.record.priority },
+          { label: 'Рекламація №', value: this.record.claimNumber },
+          { label: 'Пріоритет', value: this.record.priority, classes: `claim-info-priority-${this.record.priority}` },
           { label: 'Стан', value: this.record.claimState }
         ]),
         this._drawFieldsList(h, [
@@ -41,7 +41,15 @@ export default {
           { label: 'Автор', value: this.record.registeredByAgent },
           { label: 'Виконавець', value: this.record.executor },
           { label: 'Реліз виявлення', value: this.record.buildFrom },
-          { label: 'Реліз виконання', value: this.record.buildToComb }
+          {
+            label: 'Реліз виконання',
+            value: this.record.buildToComb,
+            classes: this.isReleaseToBeta
+              ? 'claim-info-rel-beta'
+              : this.isReleaseToStable
+                ? 'claim-info-rel-stable'
+                : ''
+          }
         ])
       ])
     }

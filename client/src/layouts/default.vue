@@ -13,7 +13,7 @@
 
         <q-toolbar-title>
           Афіна Сіквел Рекламації
-          <div slot="subtitle">Проектно-методічний відділ</div>
+          <div slot="subtitle">Проектно-методичний відділ</div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>

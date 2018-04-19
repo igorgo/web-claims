@@ -80,17 +80,37 @@ export default {
                   staticClass: 'row justify-start q-mr-lg'
                 }, [
                   h('div', {staticClass: 'col row q-px-xs q-pb-xs items-center'}, [
-                    h('small', {staticClass: 'col-sm-6 col-12 q-mt-xs text-grey'}, [
+                    h('small', {
+                      staticClass: 'col-12 q-mt-xs text-grey',
+                      'class': {
+                        'col-sm-4': Platform.is.desktop,
+                        'col-sm-6': !Platform.is.desktop
+                      }
+                    }, [
                       this.$routines.formatDate(claim.regDate),
                       h('cite', {staticClass: 'q-pl-xs'}, [claim.author])
                     ]),
-                    h('small', {staticClass: 'col-sm-6 col-12 row q-mt-xs items-center'}, [
+                    h('small', {
+                      staticClass: 'col-12 row q-mt-xs items-center',
+                      'class': {
+                        'col-sm-4': Platform.is.desktop,
+                        'col-sm-6': !Platform.is.desktop
+                      }
+                    }, [
                       h('div', {staticClass: `col-auto q-pa-xs claim-row-status items-center row claim-row-tstatus-${claim.typicalStatus}`}, [
                         h(QIcon, {props: {name: `bt-${['', 'time-wait', 'processing', 'round-done', 'round-cancel'][claim.typicalStatus]}`}}),
                         h('span', {staticClass: 'q-pl-xs'}, [claim.status])
                       ]),
                       h('span', {staticClass: 'q-pl-xs'}, [claim.executor])
-                    ])
+                    ]),
+                    Platform.is.desktop
+                      ? h('small', {
+                        staticClass: 'col-sm-4 row justify-end q-mt-xs items-center text-tertiary text-right'
+                      }, [
+                        h('cite', {staticClass: 'q-px-xs'}, ['Остання зміна: ']),
+                        h('span', {staticClass: ''}, [`${this.$routines.formatDate(claim.changeDate)} (${claim.changer})`])
+                      ])
+                      : null
                   ])
                 ])
             ])

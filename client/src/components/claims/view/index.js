@@ -1,4 +1,4 @@
-import {QWindowResizeObservable, QScrollArea} from 'quasar'
+import {QWindowResizeObservable, QScrollArea, Platform} from 'quasar'
 import ClaimNavigator from './claim-navigator'
 import ClaimFieldsInfo from './claim-fields-info'
 import ClaimRequisites from './claim-requisites'
@@ -56,21 +56,23 @@ export default {
     children.push(h(QWindowResizeObservable, {on: {resize: this.navResized}}))
     if (this.$store.state.claims.claimList.length > 0) children.push(this.drawNavigator(h))
     children.push(h(QScrollArea, {staticClass: 'claim-scroll-area'}, [
-      this.drawFieldsInfo(h),
-      this.drawRequisites(h),
-      this.drawClaimText(h),
-      this.drawFiles(h),
-      this.drawHistory(h),
-      this.drawActions(h),
-      h(
-        AfscBackToTop,
-        {
-          props: {
-            xPos: 18,
-            yPos: 18
+      h('div', {'class': {'selectable': Platform.is.desktop}}, [
+        this.drawFieldsInfo(h),
+        this.drawRequisites(h),
+        this.drawClaimText(h),
+        this.drawFiles(h),
+        this.drawHistory(h),
+        this.drawActions(h),
+        h(
+          AfscBackToTop,
+          {
+            props: {
+              xPos: 18,
+              yPos: 18
+            }
           }
-        }
-      )
+        )
+      ])
     ]))
     return h(AfscTouchPan, { props: {handler: this.onPanning}, staticClass: 'q-pa-md' }, children)
   }

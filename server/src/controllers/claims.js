@@ -73,6 +73,7 @@ async function claimsFind (req, res, next) {
              S07 as "author",
              S08 as "description",
              S09 as "executor",
+             S10 as "changer",
              D01 as "regDate",
              D02 as "changeDate"
         from table(UDO_PACKAGE_NODEWEB_IFACE.GET_CLAIMS(

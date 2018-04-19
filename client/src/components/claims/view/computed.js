@@ -8,6 +8,8 @@ export default {
     actionsMask () { return this.$store.state.claims.actionsMask },
     availableActions () { return this.$store.getters['claims/availableActions'] },
     fullNo () { return this.record.claimPrefix + '-' + this.record.claimNumber },
-    id () { return parseInt(this.$route.params.id) }
+    id () { return parseInt(this.$route.params.id) },
+    isReleaseToStable () { return this.$store.state.claims.claimRecord.relTo === this.$store.state.main.stableRelease.releaseName },
+    isReleaseToBeta () { return this.$store.state.claims.claimRecord.relTo === this.$store.state.main.betaRelease.releaseName }
   }
 }

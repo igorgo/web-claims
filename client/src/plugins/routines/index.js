@@ -199,7 +199,7 @@ const NOTES_HEADER_OPTIONS = [
   },
   {
     label: 'Документування',
-    value: 'Документування'
+    value: 'Документирование'
   },
   {
     label: 'Уточнення',
