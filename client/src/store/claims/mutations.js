@@ -25,7 +25,7 @@ export const claimListGot = (state, data) => {
   state.newAddedClaimId = null
   state.claimList = data.claims
   state.allClaimsCount = data.allCnt
-  state.claimListPages = Math.floor(data.allCnt / data.limit) + 1
+  state.claimListPages = Math.ceil(data.allCnt / data.limit) || 1
   /* if (state.claimRecordIndexWait !== null) {
     Events.$emit(AE_CLAIMS_PAGE_SHIFTED, { idx: state.claimRecordIndexWait })
     state.claimRecordIndexWait = null
