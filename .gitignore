@@ -9,3 +9,4 @@
 /client/src/css/afs-icons.*
 /client/dist/
 /server/static/
+/server/config/config.json
