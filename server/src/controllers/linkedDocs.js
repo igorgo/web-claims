@@ -53,7 +53,7 @@ async function getFile (req, res, next) {
         conn.close()
       })
     } catch (e) {
-      console.log(e)
+      console.log(new Date(), e)
       conn.close()
     }
   } catch (e) {
@@ -65,11 +65,7 @@ async function uploadFile (req, res, next) {
   try {
     checkSession(req)
     const { sessionID, id, filename, file } = req.params
-    console.log(req.params)
-    console.log('sessionID', sessionID)
-    console.log('id', id)
-    console.log('file', file)
-    console.log('filename', Buffer.from(filename, 'base64').toString())
+    console.log(new Date(), 'filename loaded:', Buffer.from(filename, 'base64').toString())
     const sql = `
     begin
       UDO_PACKAGE_NODEWEB_IFACE.ACT_ADD_DOC(

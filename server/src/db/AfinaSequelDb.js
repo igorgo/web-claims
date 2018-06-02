@@ -177,40 +177,45 @@ class AfinaSequelDb {
     this.pubPassword = pubPassword
   }
 
-  async __pubLogon () {
+  async __pubLogon (fromKeepAlive = false) {
     this.pubSessionActive = false
-    try {
-      const cLogInfo = await this.logon(this.pubUser, this.pubPassword)
-      this.pubSessionID = cLogInfo.sessionID
-      this.pubSessionActive = true
+    if (!fromKeepAlive) {
       this.pubSessionTimer = setInterval(
         () => {
           this.pubKeepAlive()
         },
         duration('30m')
       )
-      console.log('Public session started')
+    }
+    try {
+      const cLogInfo = await this.logon(this.pubUser, this.pubPassword)
+      this.pubSessionID = cLogInfo.sessionID
+      this.pubSessionActive = true
+      console.log(new Date(), 'Public session started')
     } catch (e) {
-      console.log('Public session not started')
-      console.error(e)
+      console.log(new Date(), 'Public session not started')
+      console.error(new Date(), e)
     }
   }
 
   pubKeepAlive () {
-    if (!this.pubSessionActive) return
-    this.getConnectionPub().then((c) => {
-      c.close()
-    })
+    if (!this.pubSessionActive) {
+      void this.__pubLogon(true)
+    } else {
+      this.getConnectionPub().then((c) => {
+        c.close()
+      })
+    }
   }
 
   async getConnectionPub () {
-    console.log(Date.now(), 'keep-alive')
+    console.log(new Date(), 'keep-alive')
     return this.getConnection(this.pubSessionID)
   }
 
   async open () {
     if (this.isOpened) return
-    console.log('Opening the database…')
+    console.log(new Date(), 'Opening the database…')
     oci.outFormat = oci.OBJECT
     oci.maxRows = 10000
     oci.fetchAsString = [oci.CLOB]
@@ -223,7 +228,7 @@ class AfinaSequelDb {
       poolTimeout: 20
     })
     this.isOpened = true
-    console.log('The database is open')
+    console.log(new Date(), 'The database is open')
     await this.__pubLogon()
   }
 
@@ -238,11 +243,11 @@ class AfinaSequelDb {
     if (!this.isOpened) return
     await this.pool.terminate()
     this.isOpened = false
-    console.log('The database is closed')
+    console.log(new Date(), 'The database is closed')
     if (this.pubSessionActive) {
       clearInterval(this.pubSessionTimer)
       await this.logoff(this.pubSessionID)
-      console.log('The public session is closed')
+      console.log(new Date(), 'The public session is closed')
     }
   }
 
@@ -277,7 +282,7 @@ class AfinaSequelDb {
     try {
       return await lConnection.execute(aSql, aBindParams, aExecuteOptions)
     } catch (e) {
-      console.error(e)
+      console.error(new Date(), e)
       throw e
     } finally {
       aConnection || await lConnection.close()
@@ -345,7 +350,7 @@ class AfinaSequelDb {
       let authMessage = 'Session started:'
       authMessage += '\n\tseesion ID: ' + lSessionId
       authMessage += '\n\tuser      : ' + resultInfo['SFULLUSERNAME']
-      console.info(authMessage)
+      console.info(new Date(), authMessage)
       return result
     } finally {
       await lConnection.close()
@@ -362,9 +367,9 @@ class AfinaSequelDb {
       await this.execute(aSessionId, 'begin PKG_SESSION.LOGOFF_WEB(SCONNECT => :SCONNECT); end;', [aSessionId])
       let authMessage = 'Session finished:'
       authMessage += '\n\tsession ID: ' + aSessionId
-      console.info(authMessage)
+      console.info(new Date(), authMessage)
     } catch (e) {
-      console.warn('Attempt logoff from non logged session')
+      console.warn(new Date(), 'Attempt logoff from non logged session')
     }
   }
 

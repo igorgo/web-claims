@@ -82,7 +82,7 @@ async function sendAuthApply (req, res, next) {
         if (error) {
           result = 4
         } else {
-          console.log('Email sent: ' + info.response)
+          console.log(new Date(), 'Email sent: ' + info.response)
         }
       })
     }
