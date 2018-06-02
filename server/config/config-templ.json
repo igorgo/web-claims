@@ -1,0 +1,34 @@
+{
+    "rest": {
+        "public": true,
+        "log": true,
+        "port": "8816",
+        "host": "0.0.0.0"
+    },
+    "db": {
+        "host": "0.0.0.0",
+        "port": "1521",
+        "database": "ORCL",
+        "schema": "SCOTT",
+        "username": "SCOTT",
+        "password": "tyger",
+        "oldpkgsess": true,
+        "scompany": "ORG",
+        "module": "Client"
+    },
+    "public": {
+        "username": "GUEST",
+        "password": "guest"
+    },
+    "log": {
+        "write": "3s",
+        "buffer": "64",
+        "keep": "100",
+        "stdout": [
+            "error",
+            "debug",
+            "warning",
+            "server"
+        ]
+    }
+}
